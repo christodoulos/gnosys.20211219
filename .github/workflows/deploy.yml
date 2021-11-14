@@ -23,8 +23,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build api and gnosys
+      - name: Build api
         run: npx nx build api --prod
+
+      - name: Build gnosys
         run: npx nx build gnosys --prod
 
       - name: Deploy
