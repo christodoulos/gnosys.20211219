@@ -1,9 +1,15 @@
-<div style="text-align: center">
-  <h1>Welcome to gnosys!</h1>
-  <img
-    width="450"
-    src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-    alt="Nx - Smart, Extensible Build Framework"
-  />
+<div class="flex h-screen">
+  <div class="m-auto">
+    <div style="text-align: center">
+      <h1 class="mb-2 p-2 bg-red-400">Welcome to gnosys!</h1>
+      <img
+        width="450"
+        src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
+        alt="Nx - Smart, Extensible Build Framework"
+      />
+    </div>
+    <div class="mt-2 p-2 bg-indigo-400">
+      Message: {{ hello$ | async | json }}
+    </div>
+  </div>
 </div>
-<div>Message: {{ hello$ | async | json }}</div>
