@@ -30,9 +30,8 @@ jobs:
         run: npx nx build gnosys --prod
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          BRANCH: heroku
-          FOLDER: dist/apps
-          CLEAN: true
+          branch: gh-pages
+          folder: dist/apps
+          clean: true
