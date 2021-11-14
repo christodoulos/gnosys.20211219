@@ -21,11 +21,11 @@ jobs:
           node-version: '16'
 
       - name: Install Dependencies
-      - run: npm install
+        run: npm install
 
       - name: Build api and gnosys
-      - run: npx nx build api --prod
-      - run: npx nx build gnosys --prod
+        run: npx nx build api --prod
+        run: npx nx build gnosys --prod
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.7.1
