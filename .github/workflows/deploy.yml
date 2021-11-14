@@ -1,0 +1,36 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup NodJS 16
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+      
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build api and gnosys
+        run: npx nx build api --prod
+        run: npx nx build gnosys --prod
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          BRANCH: heroku
+          FOLDER: dist/apps
+          CLEAN: true
