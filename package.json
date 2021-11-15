@@ -2,10 +2,13 @@
   "name": "gnosys",
   "version": "0.0.0",
   "license": "MIT",
+  "engines": {
+    "node": "16.13.0"
+  },
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
-    "start": "nx serve",
+    "start": "node dist/apps/api/main",
     "build": "nx build",
     "test": "nx test"
   },
@@ -22,6 +25,7 @@
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/serve-static": "^2.2.2",
     "@nrwl/angular": "13.1.4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.6.0",
