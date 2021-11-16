@@ -1,15 +1,10 @@
 <div class="flex h-screen">
-  <div class="m-auto">
-    <div style="text-align: center">
-      <h1 class="mb-2 p-2 bg-red-400">Welcome to gnosys!</h1>
-      <img
-        width="450"
-        src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-        alt="Nx - Smart, Extensible Build Framework"
-      />
-    </div>
-    <div class="mt-2 p-2 bg-indigo-400">
-      Message: {{ hello$ | async | json }}
+  <div class="m-auto p-5 text-center">
+    <span class="p-2 mb-2 text-2xl font-bold">Welcome to gnosys</span>
+    <img class="mt-5" src="/assets/icons/owl.svg" />
+    <div class="flex flex-row justify-around mt-2">
+      <span class="cursor-pointer font-semibold text-gray-500">Sign Up</span>
+      <span class="cursor-pointer font-semibold text-gray-500">Sign In</span>
     </div>
   </div>
 </div>

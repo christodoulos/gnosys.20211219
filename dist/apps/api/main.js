@@ -71,17 +71,19 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppModule = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const serve_static_1 = __webpack_require__("@nestjs/serve-static");
 const auth_module_1 = __webpack_require__("./apps/api/src/app/auth/auth.module.ts");
 const users_module_1 = __webpack_require__("./apps/api/src/app/users/users.module.ts");
 const app_controller_1 = __webpack_require__("./apps/api/src/app/app.controller.ts");
 const app_service_1 = __webpack_require__("./apps/api/src/app/app.service.ts");
-const serve_static_1 = __webpack_require__("@nestjs/serve-static");
 const path_1 = __webpack_require__("path");
 let AppModule = class AppModule {
 };
 AppModule = tslib_1.__decorate([
     common_1.Module({
         imports: [
+            mongoose_1.MongooseModule.forRoot('mongodb+srv://dbadmin:<password>@nocode.5hzdy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'),
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: path_1.join(__dirname, '..', 'gnosys'),
                 exclude: ['/api*'],
@@ -130,7 +132,7 @@ const common_1 = __webpack_require__("@nestjs/common");
 const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
 const users_module_1 = __webpack_require__("./apps/api/src/app/users/users.module.ts");
 const passport_1 = __webpack_require__("@nestjs/passport");
-const local_strategy_1 = __webpack_require__("./apps/api/src/app/auth/local.strategy.ts");
+// import { LocalStrategy } from './local.strategy';
 const jwt_1 = __webpack_require__("@nestjs/jwt");
 const constants_1 = __webpack_require__("./apps/api/src/app/auth/constants.ts");
 const jwt_strategy_1 = __webpack_require__("./apps/api/src/app/auth/jwt.strategy.ts");
@@ -146,7 +148,11 @@ AuthModule = tslib_1.__decorate([
                 signOptions: { expiresIn: '60s' },
             }),
         ],
-        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy],
+        providers: [
+            auth_service_1.AuthService,
+            // LocalStrategy,
+            jwt_strategy_1.JwtStrategy,
+        ],
         exports: [auth_service_1.AuthService],
     })
 ], AuthModule);
@@ -159,26 +165,32 @@ exports.AuthModule = AuthModule;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthService = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
 const users_service_1 = __webpack_require__("./apps/api/src/app/users/users.service.ts");
 const jwt_1 = __webpack_require__("@nestjs/jwt");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const user_schema_1 = __webpack_require__("./apps/api/src/app/users/user.schema.ts");
+const mongoose_2 = __webpack_require__("mongoose");
 let AuthService = class AuthService {
-    constructor(usersService, jwtService) {
+    constructor(userModel, usersService, jwtService) {
+        this.userModel = userModel;
         this.usersService = usersService;
         this.jwtService = jwtService;
     }
-    validateUser(username, pass) {
+    validateUser(jwtPayload) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const user = yield this.usersService.findOne(username);
-            if (user && user.password === pass) {
-                const { password } = user, result = tslib_1.__rest(user, ["password"]);
-                return result;
+            const user = yield this.userModel.findOne({
+                _id: jwtPayload.userId,
+                emailVerified: true,
+            });
+            if (!user) {
+                throw new common_1.UnauthorizedException('User not authorized.');
             }
-            return null;
+            return user;
         });
     }
     login(user) {
@@ -192,7 +204,8 @@ let AuthService = class AuthService {
 };
 AuthService = tslib_1.__decorate([
     common_1.Injectable(),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object])
+    tslib_1.__param(0, mongoose_1.InjectModel(user_schema_1.User.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _b : Object, typeof (_c = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _c : Object])
 ], AuthService);
 exports.AuthService = AuthService;
 
@@ -284,38 +297,120 @@ exports.LocalAuthGuard = LocalAuthGuard;
 
 /***/ }),
 
-/***/ "./apps/api/src/app/auth/local.strategy.ts":
+/***/ "./apps/api/src/app/users/create-user.dto.ts":
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CreateUserDto = void 0;
+class CreateUserDto {
+}
+exports.CreateUserDto = CreateUserDto;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/users/user.schema.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.LocalStrategy = void 0;
+exports.UserSchema = exports.User = void 0;
 const tslib_1 = __webpack_require__("tslib");
-const passport_local_1 = __webpack_require__("passport-local");
-const passport_1 = __webpack_require__("@nestjs/passport");
-const common_1 = __webpack_require__("@nestjs/common");
-const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
-let LocalStrategy = class LocalStrategy extends passport_1.PassportStrategy(passport_local_1.Strategy) {
-    constructor(authService) {
-        super();
-        this.authService = authService;
-    }
-    validate(username, password) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const user = yield this.authService.validateUser(username, password);
-            if (!user) {
-                throw new common_1.UnauthorizedException();
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const mongoose = __webpack_require__("mongoose");
+const validator_1 = __webpack_require__("validator");
+const bcrypt = __webpack_require__("bcrypt");
+let User = class User {
+};
+tslib_1.__decorate([
+    mongoose_1.Prop({ type: mongoose.Schema.Types.ObjectId, required: true }),
+    tslib_1.__metadata("design:type", String)
+], User.prototype, "uid", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({
+        lowercase: true,
+        validate: validator_1.default.isEmail,
+        maxlength: 256,
+        minlength: 6,
+        required: [true, 'BLANK_EMAIL'],
+    }),
+    tslib_1.__metadata("design:type", String)
+], User.prototype, "email", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({ maxlength: 1024, minlength: 8, required: [true, 'BLANK_PASSWORD'] }),
+    tslib_1.__metadata("design:type", String)
+], User.prototype, "password", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({ required: [true, 'BLANK_GIVEN_NAME'] }),
+    tslib_1.__metadata("design:type", String)
+], User.prototype, "givenName", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({ required: [true, 'BLANK_FAMILY_NAME'] }),
+    tslib_1.__metadata("design:type", String)
+], User.prototype, "familyName", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({ default: false }),
+    tslib_1.__metadata("design:type", Boolean)
+], User.prototype, "emailVerified", void 0);
+User = tslib_1.__decorate([
+    mongoose_1.Schema()
+], User);
+exports.User = User;
+exports.UserSchema = mongoose_1.SchemaFactory.createForClass(User);
+exports.UserSchema.pre('save', function (next) {
+    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        try {
+            if (!this.isModified('password')) {
+                return next();
             }
-            return user;
+            const hashed = yield bcrypt.hash(this['password'], 10);
+            this['password'] = hashed;
+            return next();
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+});
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/users/users.controller.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UsersController = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const create_user_dto_1 = __webpack_require__("./apps/api/src/app/users/create-user.dto.ts");
+const users_service_1 = __webpack_require__("./apps/api/src/app/users/users.service.ts");
+let UsersController = class UsersController {
+    constructor(userService) {
+        this.userService = userService;
+    }
+    register(createUserDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return yield this.userService.create(createUserDto);
         });
     }
 };
-LocalStrategy = tslib_1.__decorate([
-    common_1.Injectable(),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
-], LocalStrategy);
-exports.LocalStrategy = LocalStrategy;
+tslib_1.__decorate([
+    common_1.Post(),
+    common_1.HttpCode(common_1.HttpStatus.CREATED),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof create_user_dto_1.CreateUserDto !== "undefined" && create_user_dto_1.CreateUserDto) === "function" ? _a : Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UsersController.prototype, "register", null);
+UsersController = tslib_1.__decorate([
+    common_1.Controller('user'),
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _b : Object])
+], UsersController);
+exports.UsersController = UsersController;
 
 
 /***/ }),
@@ -328,11 +423,18 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersModule = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const users_controller_1 = __webpack_require__("./apps/api/src/app/users/users.controller.ts");
 const users_service_1 = __webpack_require__("./apps/api/src/app/users/users.service.ts");
+const user_schema_1 = __webpack_require__("./apps/api/src/app/users/user.schema.ts");
 let UsersModule = class UsersModule {
 };
 UsersModule = tslib_1.__decorate([
     common_1.Module({
+        imports: [
+            mongoose_1.MongooseModule.forFeature([{ name: user_schema_1.User.name, schema: user_schema_1.UserSchema }]),
+        ],
+        controllers: [users_controller_1.UsersController],
         providers: [users_service_1.UsersService],
         exports: [users_service_1.UsersService],
     })
@@ -346,33 +448,45 @@ exports.UsersModule = UsersModule;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersService = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
+const mongoose_1 = __webpack_require__("mongoose");
+const mongoose_2 = __webpack_require__("@nestjs/mongoose");
+const user_schema_1 = __webpack_require__("./apps/api/src/app/users/user.schema.ts");
 let UsersService = class UsersService {
-    constructor() {
-        this.users = [
-            {
-                userId: 1,
-                username: 'john',
-                password: 'changeme',
-            },
-            {
-                userId: 2,
-                username: 'maria',
-                password: 'guess',
-            },
-        ];
+    constructor(userModel) {
+        this.userModel = userModel;
     }
-    findOne(username) {
+    create(createUserDto) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            return this.users.find((user) => user.username === username);
+            const createdUser = new this.userModel(createUserDto);
+            return createdUser.save();
+        });
+    }
+    findAll() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.userModel.find().exec();
+        });
+    }
+    //
+    // Private Methods
+    //
+    isEmailUnique(email) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const user = yield this.userModel.findOne({ email, verified: true });
+            if (user) {
+                throw new common_1.BadRequestException('User already exists.');
+            }
         });
     }
 };
 UsersService = tslib_1.__decorate([
-    common_1.Injectable()
+    common_1.Injectable(),
+    tslib_1.__param(0, mongoose_2.InjectModel(user_schema_1.User.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _a : Object])
 ], UsersService);
 exports.UsersService = UsersService;
 
@@ -400,6 +514,13 @@ module.exports = require("@nestjs/jwt");
 
 /***/ }),
 
+/***/ "@nestjs/mongoose":
+/***/ ((module) => {
+
+module.exports = require("@nestjs/mongoose");
+
+/***/ }),
+
 /***/ "@nestjs/passport":
 /***/ ((module) => {
 
@@ -414,6 +535,20 @@ module.exports = require("@nestjs/serve-static");
 
 /***/ }),
 
+/***/ "bcrypt":
+/***/ ((module) => {
+
+module.exports = require("bcrypt");
+
+/***/ }),
+
+/***/ "mongoose":
+/***/ ((module) => {
+
+module.exports = require("mongoose");
+
+/***/ }),
+
 /***/ "passport-jwt":
 /***/ ((module) => {
 
@@ -421,17 +556,17 @@ module.exports = require("passport-jwt");
 
 /***/ }),
 
-/***/ "passport-local":
-/***/ ((module) => {
-
-module.exports = require("passport-local");
-
-/***/ }),
-
 /***/ "tslib":
 /***/ ((module) => {
 
 module.exports = require("tslib");
+
+/***/ }),
+
+/***/ "validator":
+/***/ ((module) => {
+
+module.exports = require("validator");
 
 /***/ }),
 
