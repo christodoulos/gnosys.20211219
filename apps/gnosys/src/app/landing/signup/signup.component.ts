@@ -21,10 +21,6 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onCancel() {
-    console.log(this.form.value);
-  }
-
   onSubmit() {
     const data = {
       email: this.form.value.email,
