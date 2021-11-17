@@ -1,0 +1,30 @@
+<div class="space-y-3">
+  <p class="font-semibold text-center">Sign In to gnosys</p>
+  <form [formGroup]="form" class="space-y-3">
+    <!-- Email -->
+    <div class="flex flex-row items-center justify-end text-sm">
+      <label class="font-medium">Email:</label>
+      <div class="ml-2">
+        <input formControlName="email" class="p-1" />
+      </div>
+    </div>
+    <!-- Password -->
+    <div class="flex flex-row items-center justify-end">
+      <label class="text-sm font-medium">Password:</label>
+      <div class="ml-2">
+        <input formControlName="password" class="p-1 text-sm" />
+      </div>
+    </div>
+  </form>
+  <!-- Buttons -->
+  <div class="flex flex-row items-center justify-end text-sm">
+    <button
+      (click)="onSignIn()"
+      class="bg-indigo-600 text-white p-2 {{
+        form.valid ? 'cursor-pointer' : 'cursor-not-allowed'
+      }}"
+    >
+      Sign In
+    </button>
+  </div>
+</div>

@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SignupComponent implements OnInit {
   form = new FormGroup({
-    email: new FormControl('', Validators.email),
+    email: new FormControl('', [Validators.email, Validators.required]),
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
     password0: new FormControl('', Validators.required),

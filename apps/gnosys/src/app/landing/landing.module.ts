@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LandingComponent } from './landing/landing.component';
 import { LandingTopbarComponent } from './landing-topbar/landing-topbar.component';
 import { SignupComponent } from './signup/signup.component';
+import { SigninComponent } from './signin/signin.component';
 
 export const routes: Route[] = [
   {
@@ -22,6 +23,6 @@ export const routes: Route[] = [
 
 @NgModule({
   imports: [CommonModule, ReactiveFormsModule, RouterModule.forChild(routes)],
-  declarations: [LandingComponent, LandingTopbarComponent, SignupComponent],
+  declarations: [LandingComponent, LandingTopbarComponent, SignupComponent, SigninComponent],
 })
 export class LandingModule {}

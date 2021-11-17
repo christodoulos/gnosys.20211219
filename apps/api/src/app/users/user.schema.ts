@@ -27,6 +27,21 @@ export class User {
   @Prop({ required: [true, 'BLANK_FAMILY_NAME'] })
   familyName: string;
 
+  @Prop({ default: ['user'] })
+  roles: [string];
+
+  @Prop({ validate: validator.isUUID })
+  verification: string;
+
+  @Prop({ default: Date.now })
+  verificationExpires: Date;
+
+  @Prop({ default: 0 })
+  loginAttempts: number;
+
+  @Prop({ default: Date.now })
+  blockExpires: Date;
+
   @Prop({ default: false })
   emailVerified: boolean;
 }
@@ -50,6 +65,10 @@ UserSchema.virtual('uid').get(function () {
   return this._id.toHexString();
 });
 
+UserSchema.virtual('displayName').get(function () {
+  return `${this.givenName} ${this.familyName}`;
+});
+
 UserSchema.set('toJSON', {
   virtuals: true,
   transform: function (doc, ret) {
@@ -58,3 +77,6 @@ UserSchema.set('toJSON', {
     delete ret.id;
   },
 });
+
+UserSchema.set('timestamps', true);
+UserSchema.set('versionKey', false);

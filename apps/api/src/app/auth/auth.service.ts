@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../users/user.schema';
 import { Model } from 'mongoose';
+import * as Cryptr from 'cryptr';
 
 interface JwtPayload {
   userId: string;
@@ -16,6 +17,14 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService
   ) {}
+
+  async createAccessToken(userId: string) {
+    // const accessToken = this.jwtService.sign({userId});
+    const accessToken = sign({ userId }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRATION,
+    });
+    return this.encryptText(accessToken);
+  }
 
   async validateUser(jwtPayload: JwtPayload): Promise<User> {
     const user = await this.userModel.findOne({
@@ -33,5 +42,9 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  encryptText(text: string): string {
+    return this.cryptr.encrypt(text);
   }
 }
