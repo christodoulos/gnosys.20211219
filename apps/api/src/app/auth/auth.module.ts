@@ -6,9 +6,12 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
+import { MongooseModule } from '@nestjs/mongoose';
+import { UserSchema } from '../users/user.schema';
 
 @Module({
   imports: [
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     UsersModule,
     PassportModule,
     JwtModule.register({

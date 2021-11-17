@@ -83,7 +83,7 @@ let AppModule = class AppModule {
 AppModule = tslib_1.__decorate([
     common_1.Module({
         imports: [
-            mongoose_1.MongooseModule.forRoot('mongodb+srv://dbadmin:<password>@nocode.5hzdy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'),
+            mongoose_1.MongooseModule.forRoot('mongodb+srv://dbadmin:7zsSF0IPmExDAJGt@nocode.5hzdy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'),
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: path_1.join(__dirname, '..', 'gnosys'),
                 exclude: ['/api*'],
@@ -136,11 +136,14 @@ const passport_1 = __webpack_require__("@nestjs/passport");
 const jwt_1 = __webpack_require__("@nestjs/jwt");
 const constants_1 = __webpack_require__("./apps/api/src/app/auth/constants.ts");
 const jwt_strategy_1 = __webpack_require__("./apps/api/src/app/auth/jwt.strategy.ts");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const user_schema_1 = __webpack_require__("./apps/api/src/app/users/user.schema.ts");
 let AuthModule = class AuthModule {
 };
 AuthModule = tslib_1.__decorate([
     common_1.Module({
         imports: [
+            mongoose_1.MongooseModule.forFeature([{ name: 'User', schema: user_schema_1.UserSchema }]),
             users_module_1.UsersModule,
             passport_1.PassportModule,
             jwt_1.JwtModule.register({
@@ -318,15 +321,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserSchema = exports.User = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const mongoose_1 = __webpack_require__("@nestjs/mongoose");
-const mongoose = __webpack_require__("mongoose");
 const validator_1 = __webpack_require__("validator");
 const bcrypt = __webpack_require__("bcrypt");
 let User = class User {
 };
-tslib_1.__decorate([
-    mongoose_1.Prop({ type: mongoose.Schema.Types.ObjectId, required: true }),
-    tslib_1.__metadata("design:type", String)
-], User.prototype, "uid", void 0);
 tslib_1.__decorate([
     mongoose_1.Prop({
         lowercase: true,
@@ -334,6 +332,7 @@ tslib_1.__decorate([
         maxlength: 256,
         minlength: 6,
         required: [true, 'BLANK_EMAIL'],
+        unique: true,
     }),
     tslib_1.__metadata("design:type", String)
 ], User.prototype, "email", void 0);
@@ -373,6 +372,17 @@ exports.UserSchema.pre('save', function (next) {
         }
     });
 });
+exports.UserSchema.virtual('uid').get(function () {
+    return this._id.toHexString();
+});
+exports.UserSchema.set('toJSON', {
+    virtuals: true,
+    transform: function (doc, ret) {
+        delete ret._id;
+        delete ret.password;
+        delete ret.id;
+    },
+});
 
 
 /***/ }),
@@ -394,7 +404,12 @@ let UsersController = class UsersController {
     }
     register(createUserDto) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            return yield this.userService.create(createUserDto);
+            return yield this.userService.create(createUserDto).catch((error) => {
+                throw new common_1.HttpException({
+                    status: common_1.HttpStatus.BAD_REQUEST,
+                    error: error,
+                }, common_1.HttpStatus.BAD_REQUEST);
+            });
         });
     }
 };

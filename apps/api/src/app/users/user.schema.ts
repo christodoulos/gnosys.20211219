@@ -8,15 +8,13 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-  uid: string;
-
   @Prop({
     lowercase: true,
     validate: validator.isEmail,
     maxlength: 256,
     minlength: 6,
     required: [true, 'BLANK_EMAIL'],
+    unique: true,
   })
   email: string;
 
@@ -46,4 +44,17 @@ UserSchema.pre('save', async function (next) {
   } catch (err) {
     return next(err);
   }
+});
+
+UserSchema.virtual('uid').get(function () {
+  return this._id.toHexString();
+});
+
+UserSchema.set('toJSON', {
+  virtuals: true,
+  transform: function (doc, ret) {
+    delete ret._id;
+    delete ret.password;
+    delete ret.id;
+  },
 });

@@ -12,7 +12,7 @@ import { join } from 'path';
 @Module({
   imports: [
     MongooseModule.forRoot(
-      'mongodb+srv://dbadmin:<password>@nocode.5hzdy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+      'mongodb+srv://dbadmin:7zsSF0IPmExDAJGt@nocode.5hzdy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
     ),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'gnosys'),

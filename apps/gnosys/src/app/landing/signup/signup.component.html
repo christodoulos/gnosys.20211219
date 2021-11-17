@@ -1,0 +1,54 @@
+<div class="space-y-3">
+  <p class="font-semibold text-center">Sign Up to gnosys</p>
+  <form [formGroup]="form" class="space-y-3">
+    <!-- Email -->
+    <div class="flex flex-row items-center justify-end text-sm">
+      <label class="font-medium">Email:</label>
+      <div class="ml-2">
+        <input formControlName="email" class="p-1" />
+      </div>
+    </div>
+    <!-- First Name -->
+    <div class="flex flex-row items-center justify-end">
+      <label class="text-sm font-medium">First Name:</label>
+      <div class="ml-2">
+        <input formControlName="firstName" class="p-1 text-sm" />
+      </div>
+    </div>
+    <!-- Last Name -->
+    <div class="flex flex-row items-center justify-end">
+      <label class="text-sm font-medium">Last Name:</label>
+      <div class="ml-2">
+        <input formControlName="lastName" class="p-1 text-sm" />
+      </div>
+    </div>
+    <!-- Password -->
+    <div class="flex flex-row items-center justify-end">
+      <label class="text-sm font-medium">Password:</label>
+      <div class="ml-2">
+        <input formControlName="password0" class="p-1 text-sm" />
+      </div>
+    </div>
+    <!-- Repeat Password -->
+    <div class="flex flex-row items-center justify-end">
+      <label class="text-sm font-medium">Repeat Password:</label>
+      <div class="ml-2">
+        <input formControlName="password1" class="p-1 text-sm" />
+      </div>
+    </div>
+  </form>
+  <!-- Buttons -->
+  <div class="flex flex-row items-center justify-around text-sm">
+    <button (click)="onCancel()" class="text-indigo-700 bg-indigo-100 p-2">
+      Cancel
+    </button>
+    <button
+      (click)="onSubmit()"
+      class="bg-indigo-600 text-white p-2 {{
+        form.valid ? 'cursor-pointer' : 'cursor-not-allowed'
+      }}"
+    >
+      Submit
+    </button>
+  </div>
+</div>
