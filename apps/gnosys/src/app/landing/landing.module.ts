@@ -14,6 +14,7 @@ export const routes: Route[] = [
     component: LandingComponent,
   },
   { path: 'signup', component: SignupComponent },
+  { path: 'signin', component: SigninComponent },
   {
     path: '',
     component: LandingTopbarComponent,
@@ -23,6 +24,11 @@ export const routes: Route[] = [
 
 @NgModule({
   imports: [CommonModule, ReactiveFormsModule, RouterModule.forChild(routes)],
-  declarations: [LandingComponent, LandingTopbarComponent, SignupComponent, SigninComponent],
+  declarations: [
+    LandingComponent,
+    LandingTopbarComponent,
+    SignupComponent,
+    SigninComponent,
+  ],
 })
 export class LandingModule {}

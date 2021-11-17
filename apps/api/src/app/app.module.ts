@@ -11,9 +11,7 @@ import { join } from 'path';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb+srv://dbadmin:7zsSF0IPmExDAJGt@nocode.5hzdy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-    ),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'gnosys'),
       exclude: ['/api*'],

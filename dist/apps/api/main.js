@@ -1,10 +1,10 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./apps/api/src/app/app.controller.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -66,7 +66,6 @@ exports.AppController = AppController;
 /***/ "./apps/api/src/app/app.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppModule = void 0;
@@ -84,7 +83,7 @@ let AppModule = class AppModule {
 AppModule = tslib_1.__decorate([
     common_1.Module({
         imports: [
-            mongoose_1.MongooseModule.forRoot('mongodb+srv://dbadmin:7zsSF0IPmExDAJGt@nocode.5hzdy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'),
+            mongoose_1.MongooseModule.forRoot(process.env.MONGO_URI),
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: path_1.join(__dirname, '..', 'gnosys'),
                 exclude: ['/api*'],
@@ -104,7 +103,6 @@ exports.AppModule = AppModule;
 /***/ "./apps/api/src/app/app.service.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppService = void 0;
@@ -126,18 +124,14 @@ exports.AppService = AppService;
 /***/ "./apps/api/src/app/auth/auth.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthModule = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
 const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
-const users_module_1 = __webpack_require__("./apps/api/src/app/users/users.module.ts");
 const passport_1 = __webpack_require__("@nestjs/passport");
-// import { LocalStrategy } from './local.strategy';
 const jwt_1 = __webpack_require__("@nestjs/jwt");
-const constants_1 = __webpack_require__("./apps/api/src/app/auth/constants.ts");
 const jwt_strategy_1 = __webpack_require__("./apps/api/src/app/auth/jwt.strategy.ts");
 const mongoose_1 = __webpack_require__("@nestjs/mongoose");
 const user_schema_1 = __webpack_require__("./apps/api/src/app/users/user.schema.ts");
@@ -147,18 +141,13 @@ AuthModule = tslib_1.__decorate([
     common_1.Module({
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: 'User', schema: user_schema_1.UserSchema }]),
-            users_module_1.UsersModule,
             passport_1.PassportModule,
             jwt_1.JwtModule.register({
-                secret: constants_1.jwtConstants.secret,
-                signOptions: { expiresIn: '60s' },
+                secret: process.env.JWT_SECRET,
+                signOptions: { expiresIn: process.env.JWT_EXPIRATION },
             }),
         ],
-        providers: [
-            auth_service_1.AuthService,
-            // LocalStrategy,
-            jwt_strategy_1.JwtStrategy,
-        ],
+        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy],
         exports: [auth_service_1.AuthService],
     })
 ], AuthModule);
@@ -170,28 +159,28 @@ exports.AuthModule = AuthModule;
 /***/ "./apps/api/src/app/auth/auth.service.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
-var _a, _b, _c;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthService = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
-const users_service_1 = __webpack_require__("./apps/api/src/app/users/users.service.ts");
 const jwt_1 = __webpack_require__("@nestjs/jwt");
+const jsonwebtoken_1 = __webpack_require__("jsonwebtoken");
 const mongoose_1 = __webpack_require__("@nestjs/mongoose");
 const user_schema_1 = __webpack_require__("./apps/api/src/app/users/user.schema.ts");
 const mongoose_2 = __webpack_require__("mongoose");
+const cryptr_1 = tslib_1.__importDefault(__webpack_require__("cryptr"));
 let AuthService = class AuthService {
-    constructor(userModel, usersService, jwtService) {
+    constructor(userModel, jwtService) {
         this.userModel = userModel;
-        this.usersService = usersService;
         this.jwtService = jwtService;
+        this.cryptr = new cryptr_1.default(process.env.ENCRYPT_JWT_SECRET);
     }
     createAccessToken(userId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             // const accessToken = this.jwtService.sign({userId});
-            const accessToken = sign({ userId }, process.env.JWT_SECRET, {
+            const accessToken = jsonwebtoken_1.sign({ userId }, process.env.JWT_SECRET, {
                 expiresIn: process.env.JWT_EXPIRATION,
             });
             return this.encryptText(accessToken);
@@ -218,13 +207,15 @@ let AuthService = class AuthService {
         });
     }
     encryptText(text) {
-        return this.cryptr.encrypt(text);
+        //   console.log(this.Cryptr('skata'));
+        //   return this.cryptr.encrypt(text);
+        return text;
     }
 };
 AuthService = tslib_1.__decorate([
     common_1.Injectable(),
     tslib_1.__param(0, mongoose_1.InjectModel(user_schema_1.User.name)),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _b : Object, typeof (_c = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _c : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object])
 ], AuthService);
 exports.AuthService = AuthService;
 
@@ -234,7 +225,6 @@ exports.AuthService = AuthService;
 /***/ "./apps/api/src/app/auth/constants.ts":
 /***/ ((__unused_webpack_module, exports) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.jwtConstants = void 0;
@@ -248,7 +238,6 @@ exports.jwtConstants = {
 /***/ "./apps/api/src/app/auth/jwt-auth.guard.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.JwtAuthGuard = void 0;
@@ -268,7 +257,6 @@ exports.JwtAuthGuard = JwtAuthGuard;
 /***/ "./apps/api/src/app/auth/jwt.strategy.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.JwtStrategy = void 0;
@@ -303,7 +291,6 @@ exports.JwtStrategy = JwtStrategy;
 /***/ "./apps/api/src/app/auth/local-auth.guard.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LocalAuthGuard = void 0;
@@ -323,7 +310,6 @@ exports.LocalAuthGuard = LocalAuthGuard;
 /***/ "./apps/api/src/app/users/dto/create-user.dto.ts":
 /***/ ((__unused_webpack_module, exports) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CreateUserDto = void 0;
@@ -334,18 +320,47 @@ exports.CreateUserDto = CreateUserDto;
 
 /***/ }),
 
+/***/ "./apps/api/src/app/users/dto/login-user.dto.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.LoginUserDto = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const class_validator_1 = __webpack_require__("class-validator");
+class LoginUserDto {
+}
+tslib_1.__decorate([
+    class_validator_1.IsNotEmpty(),
+    class_validator_1.IsString(),
+    class_validator_1.MinLength(5),
+    class_validator_1.MaxLength(255),
+    class_validator_1.IsEmail(),
+    tslib_1.__metadata("design:type", String)
+], LoginUserDto.prototype, "email", void 0);
+tslib_1.__decorate([
+    class_validator_1.IsNotEmpty(),
+    class_validator_1.IsString(),
+    class_validator_1.MinLength(5),
+    class_validator_1.MaxLength(1024),
+    tslib_1.__metadata("design:type", String)
+], LoginUserDto.prototype, "password", void 0);
+exports.LoginUserDto = LoginUserDto;
+
+
+/***/ }),
+
 /***/ "./apps/api/src/app/users/user.schema.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserSchema = exports.User = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const mongoose_1 = __webpack_require__("@nestjs/mongoose");
-const validator_1 = __webpack_require__("validator");
-const bcrypt = __webpack_require__("bcrypt");
+const validator_1 = tslib_1.__importDefault(__webpack_require__("validator"));
+const bcrypt = tslib_1.__importStar(__webpack_require__("bcrypt"));
 let User = class User {
 };
 tslib_1.__decorate([
@@ -438,14 +453,14 @@ exports.UserSchema.set('versionKey', false);
 /***/ "./apps/api/src/app/users/users.controller.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
-var _a, _b;
+var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersController = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
 const create_user_dto_1 = __webpack_require__("./apps/api/src/app/users/dto/create-user.dto.ts");
+const login_user_dto_1 = __webpack_require__("./apps/api/src/app/users/dto/login-user.dto.ts");
 const users_service_1 = __webpack_require__("./apps/api/src/app/users/users.service.ts");
 let UsersController = class UsersController {
     constructor(userService) {
@@ -454,6 +469,11 @@ let UsersController = class UsersController {
     register(createUserDto) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return yield this.userService.create(createUserDto);
+        });
+    }
+    login(req, loginUserDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return yield this.userService.login(req, loginUserDto);
         });
     }
 };
@@ -465,9 +485,18 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof create_user_dto_1.CreateUserDto !== "undefined" && create_user_dto_1.CreateUserDto) === "function" ? _a : Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UsersController.prototype, "register", null);
+tslib_1.__decorate([
+    common_1.Post('login'),
+    common_1.HttpCode(common_1.HttpStatus.OK),
+    tslib_1.__param(0, common_1.Req()),
+    tslib_1.__param(1, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof Request !== "undefined" && Request) === "function" ? _b : Object, typeof (_c = typeof login_user_dto_1.LoginUserDto !== "undefined" && login_user_dto_1.LoginUserDto) === "function" ? _c : Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UsersController.prototype, "login", null);
 UsersController = tslib_1.__decorate([
     common_1.Controller('user'),
-    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _b : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _d : Object])
 ], UsersController);
 exports.UsersController = UsersController;
 
@@ -477,7 +506,6 @@ exports.UsersController = UsersController;
 /***/ "./apps/api/src/app/users/users.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersModule = void 0;
@@ -487,16 +515,17 @@ const mongoose_1 = __webpack_require__("@nestjs/mongoose");
 const users_controller_1 = __webpack_require__("./apps/api/src/app/users/users.controller.ts");
 const users_service_1 = __webpack_require__("./apps/api/src/app/users/users.service.ts");
 const user_schema_1 = __webpack_require__("./apps/api/src/app/users/user.schema.ts");
+const auth_module_1 = __webpack_require__("./apps/api/src/app/auth/auth.module.ts");
 let UsersModule = class UsersModule {
 };
 UsersModule = tslib_1.__decorate([
     common_1.Module({
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: user_schema_1.User.name, schema: user_schema_1.UserSchema }]),
+            auth_module_1.AuthModule,
         ],
         controllers: [users_controller_1.UsersController],
         providers: [users_service_1.UsersService],
-        exports: [users_service_1.UsersService],
     })
 ], UsersModule);
 exports.UsersModule = UsersModule;
@@ -505,16 +534,130 @@ exports.UsersModule = UsersModule;
 /***/ }),
 
 /***/ "./apps/api/src/app/users/users.service.ts":
-/***/ (() => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-throw new Error("Module parse failed: Unexpected token (40:12)\nFile was processed with these loaders:\n * ./node_modules/ts-loader/index.js\nYou may need an additional loader to handle the result of these loaders.\n|                 email: user.email,\n|                 accessToken: yield this.authService.\n>             };\n|         });\n|     }");
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UsersService = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const mongoose_1 = __webpack_require__("mongoose");
+const uuid_1 = __webpack_require__("uuid");
+const date_fns_1 = __webpack_require__("date-fns");
+const bcrypt = tslib_1.__importStar(__webpack_require__("bcrypt"));
+const mongoose_2 = __webpack_require__("@nestjs/mongoose");
+const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
+let UsersService = class UsersService {
+    constructor(userModel, authService) {
+        this.userModel = userModel;
+        this.authService = authService;
+        this.hours_to_verify = 4;
+        this.login_attempts_to_block = 6;
+        this.hours_to_block = 8;
+    }
+    create(createUserDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const createdUser = new this.userModel(createUserDto);
+            yield this.isEmailUnique(createdUser.email);
+            this.setRegistrationInfo(createdUser);
+            return yield createdUser.save();
+        });
+    }
+    login(req, loginUserDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const user = yield this.findUserByEmail(loginUserDto.email);
+            this.isUserBlocked(user);
+            yield this.checkPassword(loginUserDto.password, user);
+            yield this.passwordsDoMatch(user);
+            return {
+                displayName: `${user.givenName} ${user.familyName}`,
+                email: user.email,
+                accessToken: yield this.authService.createAccessToken(user.email),
+            };
+        });
+    }
+    findAll() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.userModel.find().exec();
+        });
+    }
+    //
+    // Private Methods
+    //
+    isEmailUnique(email) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const user = yield this.userModel.findOne({ email, verified: true });
+            if (user) {
+                throw new common_1.BadRequestException('User already exists.');
+            }
+        });
+    }
+    setRegistrationInfo(user) {
+        user.verification = uuid_1.v4();
+        user.verificationExpires = date_fns_1.addHours(new Date(), this.hours_to_verify);
+    }
+    findUserByEmail(email) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            // const user = await this.userModel.findOne({ email, verified: true });
+            const user = yield this.userModel.findOne({ email });
+            if (!user) {
+                throw new common_1.NotFoundException('Wrong email or password.');
+            }
+            return user;
+        });
+    }
+    isUserBlocked(user) {
+        if (user.blockExpires > Date.now()) {
+            throw new common_1.ConflictException('User has been blocked, try again later.');
+        }
+    }
+    checkPassword(attemptPass, user) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const match = yield bcrypt.compare(attemptPass, user.password);
+            if (!match) {
+                yield this.passwordsDoNotMatch(user);
+                throw new common_1.NotFoundException('Wrong email or password.');
+            }
+            return match;
+        });
+    }
+    passwordsDoNotMatch(user) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            user.loginAttempts += 1;
+            yield user.save();
+            if (user.loginAttempts >= this.login_attempts_to_block) {
+                yield this.blockUser(user);
+                throw new common_1.ConflictException('User blocked.');
+            }
+        });
+    }
+    blockUser(user) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            user.blockExpires = date_fns_1.addHours(new Date(), this.hours_to_block);
+            yield user.save();
+        });
+    }
+    passwordsDoMatch(user) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            user.loginAttempts = 0;
+            yield user.save();
+        });
+    }
+};
+UsersService = tslib_1.__decorate([
+    common_1.Injectable(),
+    tslib_1.__param(0, mongoose_2.InjectModel('User')),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _a : Object, typeof (_b = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _b : Object])
+], UsersService);
+exports.UsersService = UsersService;
+
 
 /***/ }),
 
 /***/ "@nestjs/common":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("@nestjs/common");
 
 /***/ }),
@@ -522,7 +665,6 @@ module.exports = require("@nestjs/common");
 /***/ "@nestjs/core":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("@nestjs/core");
 
 /***/ }),
@@ -530,7 +672,6 @@ module.exports = require("@nestjs/core");
 /***/ "@nestjs/jwt":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("@nestjs/jwt");
 
 /***/ }),
@@ -538,7 +679,6 @@ module.exports = require("@nestjs/jwt");
 /***/ "@nestjs/mongoose":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("@nestjs/mongoose");
 
 /***/ }),
@@ -546,7 +686,6 @@ module.exports = require("@nestjs/mongoose");
 /***/ "@nestjs/passport":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("@nestjs/passport");
 
 /***/ }),
@@ -554,7 +693,6 @@ module.exports = require("@nestjs/passport");
 /***/ "@nestjs/serve-static":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("@nestjs/serve-static");
 
 /***/ }),
@@ -562,15 +700,41 @@ module.exports = require("@nestjs/serve-static");
 /***/ "bcrypt":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("bcrypt");
+
+/***/ }),
+
+/***/ "class-validator":
+/***/ ((module) => {
+
+module.exports = require("class-validator");
+
+/***/ }),
+
+/***/ "cryptr":
+/***/ ((module) => {
+
+module.exports = require("cryptr");
+
+/***/ }),
+
+/***/ "date-fns":
+/***/ ((module) => {
+
+module.exports = require("date-fns");
+
+/***/ }),
+
+/***/ "jsonwebtoken":
+/***/ ((module) => {
+
+module.exports = require("jsonwebtoken");
 
 /***/ }),
 
 /***/ "mongoose":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("mongoose");
 
 /***/ }),
@@ -578,7 +742,6 @@ module.exports = require("mongoose");
 /***/ "passport-jwt":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("passport-jwt");
 
 /***/ }),
@@ -586,15 +749,20 @@ module.exports = require("passport-jwt");
 /***/ "tslib":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("tslib");
+
+/***/ }),
+
+/***/ "uuid":
+/***/ ((module) => {
+
+module.exports = require("uuid");
 
 /***/ }),
 
 /***/ "validator":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("validator");
 
 /***/ }),
@@ -602,7 +770,6 @@ module.exports = require("validator");
 /***/ "path":
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("path");
 
 /***/ })
@@ -635,9 +802,8 @@ module.exports = require("path");
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-"use strict";
 var exports = __webpack_exports__;
 
 /**

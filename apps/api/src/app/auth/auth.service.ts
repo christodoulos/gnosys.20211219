@@ -1,10 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { sign } from 'jsonwebtoken';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../users/user.schema';
 import { Model } from 'mongoose';
-import * as Cryptr from 'cryptr';
+import Cryptr from 'cryptr';
 
 interface JwtPayload {
   userId: string;
@@ -12,11 +12,13 @@ interface JwtPayload {
 
 @Injectable()
 export class AuthService {
+  cryptr: Cryptr;
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private usersService: UsersService,
     private jwtService: JwtService
-  ) {}
+  ) {
+    this.cryptr = new Cryptr(process.env.ENCRYPT_JWT_SECRET);
+  }
 
   async createAccessToken(userId: string) {
     // const accessToken = this.jwtService.sign({userId});
@@ -45,6 +47,8 @@ export class AuthService {
   }
 
   encryptText(text: string): string {
-    return this.cryptr.encrypt(text);
+    //   console.log(this.Cryptr('skata'));
+    //   return this.cryptr.encrypt(text);
+    return text;
   }
 }

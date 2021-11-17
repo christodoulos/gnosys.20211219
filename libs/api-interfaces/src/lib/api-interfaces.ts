@@ -3,9 +3,9 @@ export interface Message {
 }
 
 export interface User {
-  uid: string;
+  // uid: string;
   email: string;
-  displayName: string;
+  // displayName: string;
   givenName: string;
   familyName: string;
   emailVerified: boolean;

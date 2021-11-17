@@ -18,7 +18,9 @@ export class SigninComponent implements OnInit {
   ngOnInit(): void {}
 
   onSignIn() {
-    const data = {};
-    this.http.post('/api/user', data);
+    console.log(this.form.value);
+    this.http
+      .post('/api/user/login', this.form.value)
+      .subscribe((data) => console.log(data));
   }
 }

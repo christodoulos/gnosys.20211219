@@ -10,6 +10,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 import { UsersService } from './users.service';
 
 @Controller('user')
@@ -20,5 +21,11 @@ export class UsersController {
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() createUserDto: CreateUserDto) {
     return await this.userService.create(createUserDto);
+  }
+
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async login(@Req() req: Request, @Body() loginUserDto: LoginUserDto) {
+    return await this.userService.login(req, loginUserDto);
   }
 }

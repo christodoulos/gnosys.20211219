@@ -10,6 +10,7 @@ import { addHours } from 'date-fns';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.schema';
+// import { User } from '@gnosys/api-interfaces';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AuthService } from '../auth/auth.service';
@@ -20,7 +21,10 @@ export class UsersService {
   login_attempts_to_block = 6;
   hours_to_block = 8;
 
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, private readonly authService: AuthService) {}
+  constructor(
+    @InjectModel('User') private userModel: Model<UserDocument>,
+    private readonly authService: AuthService
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
@@ -37,7 +41,7 @@ export class UsersService {
     return {
       displayName: `${user.givenName} ${user.familyName}`,
       email: user.email,
-      accessToken: await this.authService.
+      accessToken: await this.authService.createAccessToken(user.email),
     };
   }
 
@@ -65,7 +69,8 @@ export class UsersService {
   }
 
   private async findUserByEmail(email: string): Promise<User> {
-    const user = await this.userModel.findOne({ email, verified: true });
+    // const user = await this.userModel.findOne({ email, verified: true });
+    const user = await this.userModel.findOne({ email });
     if (!user) {
       throw new NotFoundException('Wrong email or password.');
     }
