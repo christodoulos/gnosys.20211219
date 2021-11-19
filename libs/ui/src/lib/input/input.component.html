@@ -1,0 +1,29 @@
+<ng-template let-error let-text="text" #tpl class="text-sm text-red-700">
+  <div class="text-red-600 text-sm border border-red-600 p-1">
+    {{ text }}
+  </div>
+</ng-template>
+<div class="flex flex-row items-center justify-end text-sm">
+  <label
+    class="font-medium {{
+      control.dirty || control.touched
+        ? control.valid
+          ? ''
+          : 'text-red-600'
+        : ''
+    }}"
+    >{{ label }}:</label
+  >
+  <div class="ml-2 {{control.valid?'':'flex flex-col justify-end'">
+    <input
+      formControlName="control"
+      class="p-1 outline-none {{
+        control.dirty || control.touched
+          ? control.valid
+            ? 'border border-green-600'
+            : 'border border-red-600'
+          : ''
+      }}"
+    />
+  </div>
+</div>

@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Route } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ErrorTailorModule } from '@ngneat/error-tailor';
+
+import { UiModule } from '@gnosys/ui';
 
 import { LandingComponent } from './landing/landing.component';
 import { LandingTopbarComponent } from './landing-topbar/landing-topbar.component';
@@ -23,7 +26,23 @@ export const routes: Route[] = [
 ];
 
 @NgModule({
-  imports: [CommonModule, ReactiveFormsModule, RouterModule.forChild(routes)],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ErrorTailorModule.forRoot({
+      errors: {
+        useValue: {
+          required: 'This field is requiredThis field is required',
+          email: 'This is not an email',
+          minlength: ({ requiredLength, actualLength }) =>
+            `Expected length is ${requiredLength} but got ${actualLength}`,
+          invalidAddress: (error) => `Address isn't valid`,
+        },
+      },
+    }),
+    RouterModule.forChild(routes),
+    UiModule,
+  ],
   declarations: [
     LandingComponent,
     LandingTopbarComponent,

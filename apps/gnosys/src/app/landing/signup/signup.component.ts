@@ -15,9 +15,17 @@ export class SignupComponent implements OnInit {
     email: new FormControl('', [Validators.email, Validators.required]),
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
     confirmPassword: new FormControl('', Validators.required),
   });
+  email = this.form.get('email');
+  firstName = this.form.get('firstName');
+  lastName = this.form.get('lastName');
+  password = this.form.get('password');
+  confirmPassword = this.form.get('confirmPassword');
 
   constructor(private http: HttpClient) {}
 
