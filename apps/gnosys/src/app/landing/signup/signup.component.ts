@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { Validators } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { HttpClient } from '@angular/common/http';
 import { combineLatest, map } from 'rxjs';
 
 @Component({
@@ -27,7 +26,7 @@ export class SignupComponent implements OnInit {
   password = this.form.get('password');
   confirmPassword = this.form.get('confirmPassword');
 
-  constructor(private http: HttpClient) {}
+  // constructor() {}
 
   ngOnInit(): void {
     combineLatest([
@@ -36,25 +35,42 @@ export class SignupComponent implements OnInit {
     ])
       .pipe(
         map(([password, confirmPassword]) => {
+          console.log(password, confirmPassword);
           if (password !== confirmPassword)
             this.form.get('confirmPassword').setErrors({ mustMatch: true });
           return password === confirmPassword ? null : { mustMatch: true };
         })
       )
       .pipe(untilDestroyed(this))
-      .subscribe((value) => this.form.get('password').mergeErrors(value));
+      .subscribe((value) => {
+        if (value) {
+          this.form.get('password').mergeErrors(value);
+        } else {
+          this.form.get('password').removeError('mustMatch');
+        }
+      });
+
+    this.email.errors$.pipe(untilDestroyed(this)).subscribe((value) => {
+      console.log('Mail errors', value);
+    });
+
+    this.password.errors$.pipe(untilDestroyed(this)).subscribe((value) => {
+      console.log('Password errors', value);
+    });
   }
 
   onSubmit() {
-    console.log(this.form.valid);
-    const data = {
-      email: this.form.value.email,
-      password: this.form.value.password,
-      givenName: this.form.value.firstName,
-      familyName: this.form.value.lastName,
-    };
-    this.http
-      .post('/api/user', data)
-      .subscribe((what) => console.log('AAA', what));
+    console.log(this.form.value);
+    //   console.log(this.form.valid);
+    //   const data = {
+    //     email: this.form.value.email,
+    //     password: this.form.value.password,
+    //     givenName: this.form.value.firstName,
+    //     familyName: this.form.value.lastName,
+    //   };
+    //   this.http
+    //     .post('/api/user', data)
+    //     .subscribe((what) => console.log('AAA', what));
+    // }
   }
 }

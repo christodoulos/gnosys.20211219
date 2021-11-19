@@ -1,0 +1,46 @@
+<form [formGroup]="formGroup">
+  <div class="space-y-3 text-sm">
+    <div
+      *ngFor="let control of controls"
+      class="flex flex-row justify-end items-center"
+    >
+      <div class="flex flex-row justify-end items-center">
+        <label
+          class="{{
+            control.value.dirty || control.value.touched
+              ? control.value.valid
+                ? ''
+                : 'text-red-600'
+              : ''
+          }} mr-2 font-semibold"
+          >{{ statCase(control.name) }}:</label
+        >
+        <div class="flex flex-col">
+          <input
+            formControlName="{{ control.name }}"
+            type="{{
+              control.name.toLowerCase().includes('password')
+                ? 'password'
+                : 'text'
+            }}"
+            class="{{
+              control.value.dirty || control.value.touched
+                ? control.value.valid
+                  ? ''
+                  : 'border border-red-600'
+                : ''
+            }} outline-none p-1"
+          />
+          <span
+            *ngIf="
+              (control.value.dirty || control.value.touched) &&
+              control.value.invalid
+            "
+            class="mt-1 text-xs text-red-600 font-semibold"
+            >{{ getError(control.value) }}</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
