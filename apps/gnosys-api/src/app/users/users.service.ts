@@ -15,6 +15,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AuthService } from '../auth/auth.service';
 
+import { MailService } from '@sendgrid/mail';
+
 @Injectable()
 export class UsersService {
   hours_to_verify = 4;
@@ -23,6 +25,7 @@ export class UsersService {
 
   constructor(
     @InjectModel('User') private userModel: Model<UserDocument>,
+    private mail: MailService,
     private readonly authService: AuthService
   ) {}
 
@@ -30,6 +33,7 @@ export class UsersService {
     const createdUser = new this.userModel(createUserDto);
     await this.isEmailUnique(createdUser.email);
     this.setRegistrationInfo(createdUser);
+    await this.sendRegistrationEmail(createdUser);
     return await createdUser.save();
   }
 
@@ -105,8 +109,28 @@ export class UsersService {
     user.blockExpires = addHours(new Date(), this.hours_to_block);
     await user.save();
   }
+
   private async passwordsDoMatch(user) {
     user.loginAttempts = 0;
     await user.save();
+  }
+
+  private async sendRegistrationEmail(user) {
+    this.mail.setApiKey(process.env.SENDGRID_API_KEY);
+    const msg = {
+      to: user.email,
+      from: 'gnosys@gnosys.tech',
+      subject: 'Complete your registration to Gnosys',
+      text: 'Please follow the link',
+      html: 'Please follow the <a href="www.ntua.gr">link</a>',
+    };
+    try {
+      await this.mail.send(msg);
+    } catch (error) {
+      console.error(error);
+      if (error.response) {
+        console.error(error.response.body);
+      }
+    }
   }
 }

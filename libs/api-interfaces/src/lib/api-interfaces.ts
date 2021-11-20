@@ -15,10 +15,9 @@ export interface User {
 
 export interface SignupForm {
   email: string;
-  firstName: string;
-  lastName: string;
+  givenName: string;
+  familyName: string;
   password: string;
-  confirmPassword: string;
 }
 
 export interface Generic {

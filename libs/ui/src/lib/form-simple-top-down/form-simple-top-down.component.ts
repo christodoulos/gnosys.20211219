@@ -20,7 +20,6 @@ export class FormSimpleTopDownComponent implements OnInit {
 
   ngOnInit(): void {
     for (const [k, v] of Object.entries(this.formGroup.controls)) {
-      console.log(k, v);
       this.controls.push({ name: k, value: v });
     }
   }

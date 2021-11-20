@@ -4,6 +4,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { User, UserSchema } from './user.schema';
 import { AuthModule } from '../auth/auth.module';
+import { MailService } from '@sendgrid/mail';
 
 @Module({
   imports: [
@@ -11,6 +12,6 @@ import { AuthModule } from '../auth/auth.module';
     AuthModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, MailService],
 })
 export class UsersModule {}
