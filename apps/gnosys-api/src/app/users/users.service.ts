@@ -117,7 +117,7 @@ export class UsersService {
     await user.save();
   }
 
-  private async sendRegistrationEmail(user) {
+  private async sendRegistrationEmail(user: UserDocument) {
     this.mail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
       to: user.email,
