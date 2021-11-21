@@ -70,11 +70,11 @@ UserSchema.virtual('displayName').get(function () {
 
 UserSchema.set('toJSON', {
   virtuals: true,
-  // transform: function (doc, ret) {
-  //   delete ret._id;
-  //   delete ret.password;
-  //   delete ret.id;
-  // },
+  transform: function (doc, ret) {
+    delete ret._id;
+    delete ret.password;
+    delete ret.id;
+  },
 });
 
 UserSchema.set('timestamps', true);

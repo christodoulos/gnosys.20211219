@@ -48,7 +48,6 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      console.log(this.form.value);
       const data = {
         email: this.form.value.email,
         password: this.form.value.password,

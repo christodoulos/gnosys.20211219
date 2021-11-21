@@ -11,7 +11,8 @@ export class LandingService {
   constructor(private http: HttpClient, private router: Router) {}
 
   signup(data: SignupForm) {
-    this.http.post('/api/user', data).subscribe((what) => {
+    this.http.post('/api/user', data).subscribe((data) => {
+      console.log(data);
       this.router.navigate(['signin']);
     });
   }
