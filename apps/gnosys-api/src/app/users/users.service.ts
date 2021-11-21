@@ -59,7 +59,7 @@ export class UsersService {
   }
 
   //
-  // Private Methods
+  // Private Methods (operate on Mongoose Documents)
   //
 
   private async isEmailUnique(email: string) {
@@ -69,10 +69,7 @@ export class UsersService {
     }
   }
 
-  private setRegistrationInfo(user: {
-    verification: string;
-    verificationExpires: Date;
-  }): void {
+  private setRegistrationInfo(user: UserDocument): void {
     user.verification = v4();
     user.verificationExpires = addHours(new Date(), this.hours_to_verify);
   }
@@ -86,13 +83,13 @@ export class UsersService {
     return user;
   }
 
-  private isUserBlocked(user): void {
-    if (user.blockExpires > Date.now()) {
+  private isUserBlocked(user: UserDocument): void {
+    if (user.blockExpires > new Date(Date.now())) {
       throw new ConflictException('User has been blocked, try again later.');
     }
   }
 
-  private async checkPassword(attemptPass: string, user) {
+  private async checkPassword(attemptPass: string, user: UserDocument) {
     const match = await bcrypt.compare(attemptPass, user.password);
     if (!match) {
       await this.passwordsDoNotMatch(user);
@@ -101,7 +98,7 @@ export class UsersService {
     return match;
   }
 
-  private async passwordsDoNotMatch(user) {
+  private async passwordsDoNotMatch(user: UserDocument) {
     user.loginAttempts += 1;
     await user.save();
     if (user.loginAttempts >= this.login_attempts_to_block) {
@@ -110,12 +107,12 @@ export class UsersService {
     }
   }
 
-  private async blockUser(user) {
+  private async blockUser(user: UserDocument) {
     user.blockExpires = addHours(new Date(), this.hours_to_block);
     await user.save();
   }
 
-  private async passwordsDoMatch(user) {
+  private async passwordsDoMatch(user: UserDocument) {
     user.loginAttempts = 0;
     await user.save();
   }
