@@ -4,13 +4,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { Model } from 'mongoose';
 import { v4 } from 'uuid';
 import { addHours } from 'date-fns';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.schema';
-// import { User } from '@gnosys/api-interfaces';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AuthService } from '../auth/auth.service';
@@ -19,12 +19,13 @@ import { MailService } from '@sendgrid/mail';
 
 @Injectable()
 export class UsersService {
+  hours_to_verify_signup = 12;
   hours_to_verify = 4;
   login_attempts_to_block = 6;
   hours_to_block = 8;
 
   constructor(
-    @InjectModel('User') private userModel: Model<UserDocument>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
     private mail: MailService,
     private readonly authService: AuthService
   ) {}
@@ -43,9 +44,13 @@ export class UsersService {
     await this.checkPassword(loginUserDto.password, user);
     await this.passwordsDoMatch(user);
     return {
-      displayName: `${user.givenName} ${user.familyName}`,
       email: user.email,
-      accessToken: await this.authService.createAccessToken(user.email),
+      givenName: user.givenName,
+      familyName: user.familyName,
+      emailVerified: user.emailVerified,
+      access_token: await this.authService.createAccessToken(user._id),
+      refreshToken: await this.authService.createRefreshToken(req, user._id),
+      roles: user.roles,
     };
   }
 
@@ -72,7 +77,7 @@ export class UsersService {
     user.verificationExpires = addHours(new Date(), this.hours_to_verify);
   }
 
-  private async findUserByEmail(email: string): Promise<User> {
+  private async findUserByEmail(email: string): Promise<UserDocument> {
     // const user = await this.userModel.findOne({ email, verified: true });
     const user = await this.userModel.findOne({ email });
     if (!user) {

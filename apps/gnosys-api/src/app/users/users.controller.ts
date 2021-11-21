@@ -9,6 +9,7 @@ import {
   HttpStatus,
   HttpException,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UsersService } from './users.service';
