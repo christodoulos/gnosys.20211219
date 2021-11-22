@@ -13,6 +13,7 @@ import { map, tap } from 'rxjs/operators';
 import { TokenService } from '../services';
 
 import jwt_decode, { JwtPayload } from 'jwt-decode';
+import { Router } from '@angular/router';
 
 // Gnosys user model
 
@@ -99,12 +100,15 @@ export const GnosysUserSignUpAction = createAction(
   props<{ data: User }>()
 );
 
+export const SignOutAction = createAction('Gnosys Sign Out');
+
 // Gnosys User Effects
 
 @Injectable({ providedIn: 'root' })
 export class GnosysUserEffects {
   constructor(
     private actions$: Actions,
+    private router: Router,
     private gnosysUserService: GnosysUserService,
     private tokenService: TokenService
   ) {}
@@ -123,6 +127,21 @@ export class GnosysUserEffects {
       tap((user) => {
         console.log('ganmo to spiti sas', user);
         this.gnosysUserService.updateUser({ ...user });
+        this.router.navigate(['user']);
+      })
+    )
+  );
+
+  signOutGnosys$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SignOutAction),
+      tap(() => {
+        console.log('Sign Out');
+        localStorage.removeItem('AkitaStores');
+        localStorage.removeItem('auth-token');
+        localStorage.removeItem('auth-refreshtoken');
+        localStorage.removeItem('auth-user');
+        this.router.navigate(['']);
       })
     )
   );
