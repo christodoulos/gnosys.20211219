@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl } from '@ngneat/reactive-forms';
 
 @Component({
@@ -6,12 +6,9 @@ import { FormControl } from '@ngneat/reactive-forms';
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.css'],
 })
-export class InputComponent implements OnInit {
+export class InputComponent {
   @Input() label = 'label';
   @Input() initialValue = '';
   @Input() validators = [];
   control = new FormControl(this.initialValue, this.validators);
-  constructor() {}
-
-  ngOnInit(): void {}
 }

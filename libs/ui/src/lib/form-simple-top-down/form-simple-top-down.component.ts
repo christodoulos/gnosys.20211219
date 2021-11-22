@@ -5,7 +5,7 @@ import {
   Input,
 } from '@angular/core';
 import { FormControl, FormGroup, ControlsOf } from '@ngneat/reactive-forms';
-import { Generic, Controls } from '@gnosys/api-interfaces';
+import { Generic, Controls } from '@gnosys/interfaces';
 import * as _ from 'lodash';
 
 @Component({
