@@ -47,8 +47,9 @@ export class UsersService {
       email: user.email,
       givenName: user.givenName,
       familyName: user.familyName,
+      displayName: `${user.givenName} ${user.familyName}`,
       emailVerified: user.emailVerified,
-      access_token: await this.authService.createAccessToken(user._id),
+      accessToken: await this.authService.createAccessToken(user._id),
       refreshToken: await this.authService.createRefreshToken(req, user._id),
       roles: user.roles,
     };

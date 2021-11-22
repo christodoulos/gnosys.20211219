@@ -6,6 +6,7 @@ import { AuthService, TokenService } from '../../services';
 import { Actions } from '@datorama/akita-ng-effects';
 
 import { GnosysUserUpdateAction } from '../../state';
+import { User } from '@gnosys/api-interfaces';
 
 @Component({
   templateUrl: './signin.component.html',
@@ -27,8 +28,12 @@ export class SigninComponent implements OnInit {
   }
 
   onSignIn() {
-    this.authService.login(this.form.value).subscribe((data) => {
+    this.authService.login(this.form.value).subscribe((data: User) => {
+      console.log(data);
       this.actions.dispatch(GnosysUserUpdateAction({ user: data }));
+      this.tokenService.saveToken(data.accessToken);
+      this.tokenService.saveRefreshToken(data.refreshToken);
+      this.tokenService.saveUser(data);
     });
   }
 }

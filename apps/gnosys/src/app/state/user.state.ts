@@ -12,6 +12,8 @@ import { User } from '@gnosys/api-interfaces';
 import { map, tap } from 'rxjs/operators';
 import { TokenService } from '../services';
 
+import jwt_decode, { JwtPayload } from 'jwt-decode';
+
 // Gnosys user model
 
 export enum GnosysRoles {
@@ -29,7 +31,8 @@ export const initGnosysUser: User = {
   email: '',
   displayName: '',
   emailVerified: false,
-  access_token: '',
+  accessToken: '',
+  refreshToken: '',
 };
 
 @Injectable({ providedIn: 'root' })
@@ -57,8 +60,29 @@ export class GnosysUserQuery extends Query<User> {
   constructor(protected store: GnosysUserStore) {
     super(store);
   }
-  role$ = this.select((state) => state.roles);
-  userEmail$ = this.select((state) => state.email);
+
+  displayName$ = this.select((state) => state.displayName);
+  familyName$ = this.select((state) => state.familyName);
+  givenName$ = this.select((state) => state.givenName);
+  roles$ = this.select((state) => state.roles);
+  email$ = this.select((state) => state.email);
+  accessToken$ = this.select((state) => state.accessToken);
+  accessTokenExpired$ = this.select((state) =>
+    this.isJWTExpired(state.accessToken)
+  );
+  isLoggedIn$ = this.select((state) => !this.isJWTExpired(state.accessToken));
+  refreshToken$ = this.select((state) => state.refreshToken);
+
+  isJWTExpired(token: string) {
+    if (!token) return true;
+    const decoded = jwt_decode<JwtPayload>(token);
+    if (decoded.exp) {
+      console.log(new Date(decoded.exp * 1000));
+      console.log(new Date(Date.now()));
+      return new Date(decoded.exp * 1000) < new Date(Date.now());
+    }
+    return true;
+  }
 }
 
 // Gnosys user Actions

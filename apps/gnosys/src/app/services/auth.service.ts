@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { User, LoginFormData } from '@gnosys/api-interfaces';
+import { TokenService } from '.';
 
 const AUTH_API = '/api/user/';
 
@@ -14,15 +15,23 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private tokenService: TokenService) {}
 
-  login(data: LoginFormData): Observable<any> {
-    return this.http.post(`${AUTH_API}login`, data, httpOptions);
+  login(data: LoginFormData): Observable<User> {
+    return this.http.post<User>(`${AUTH_API}login`, data, httpOptions);
   }
 
-  register(username: string, email: string, password: string): Observable<any> {
-    return this.http.post(
-      AUTH_API + 'signup',
+  isLoggedIn() {
+    return !!this.tokenService.getToken();
+  }
+
+  register(
+    username: string,
+    email: string,
+    password: string
+  ): Observable<User> {
+    return this.http.post<User>(
+      `${AUTH_API}signup`,
       {
         username,
         email,

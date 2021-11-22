@@ -77,5 +77,7 @@ UserSchema.set('toJSON', {
   },
 });
 
+UserSchema.set('toObject', { virtuals: true });
+
 UserSchema.set('timestamps', true);
 UserSchema.set('versionKey', false);

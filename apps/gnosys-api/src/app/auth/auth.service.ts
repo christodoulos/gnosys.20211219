@@ -34,7 +34,8 @@ export class AuthService {
     const accessToken = sign({ userId }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRATION,
     });
-    return this.encryptText(accessToken);
+    // return this.encryptText(accessToken);
+    return accessToken;
   }
 
   async createRefreshToken(req: Request, userId) {

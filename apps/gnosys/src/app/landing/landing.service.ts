@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SignupForm } from '@gnosys/api-interfaces';
+import { SignUpFormData } from '@gnosys/api-interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -10,9 +10,9 @@ import { SignupForm } from '@gnosys/api-interfaces';
 export class LandingService {
   constructor(private http: HttpClient, private router: Router) {}
 
-  signup(data: SignupForm) {
-    this.http.post('/api/user', data).subscribe((data) => {
-      console.log(data);
+  signup(data: SignUpFormData) {
+    this.http.post('/api/user', data).subscribe((newUser) => {
+      console.log(newUser);
       this.router.navigate(['signin']);
     });
   }

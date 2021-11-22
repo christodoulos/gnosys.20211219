@@ -10,20 +10,28 @@ export interface User {
   givenName: string;
   familyName: string;
   emailVerified: boolean;
-  access_token: string;
+  accessToken: string;
+  refreshToken: string;
   roles?: [string];
 }
 
-export interface SignupForm {
-  email: string;
-  givenName: string;
-  familyName: string;
-  password: string;
-}
+// export interface SignupForm {
+//   email: string;
+//   givenName: string;
+//   familyName: string;
+//   password: string;
+// }
 
 export interface LoginFormData {
   email: string;
   password: string;
+}
+
+export interface SignUpFormData {
+  email: string;
+  password: string;
+  givenName: string;
+  familyName: string;
 }
 
 export interface Generic {
