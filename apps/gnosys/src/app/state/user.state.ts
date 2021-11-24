@@ -8,9 +8,9 @@ import {
   props,
 } from '@datorama/akita-ng-effects';
 
-import { User } from '@gnosys/api-interfaces';
-import { map, tap } from 'rxjs/operators';
-import { TokenService } from '../services';
+import { LoginFormData, User } from '@gnosys/interfaces';
+import { map, take, tap } from 'rxjs/operators';
+import { AuthService, TokenService } from '../services';
 
 import jwt_decode, { JwtPayload } from 'jwt-decode';
 import { Router } from '@angular/router';
@@ -32,6 +32,7 @@ export const initGnosysUser: User = {
   email: '',
   displayName: '',
   emailVerified: false,
+  verification: '',
   accessToken: '',
   refreshToken: '',
 };
@@ -78,8 +79,6 @@ export class GnosysUserQuery extends Query<User> {
     if (!token) return true;
     const decoded = jwt_decode<JwtPayload>(token);
     if (decoded.exp) {
-      console.log(new Date(decoded.exp * 1000));
-      console.log(new Date(Date.now()));
       return new Date(decoded.exp * 1000) < new Date(Date.now());
     }
     return true;
@@ -89,6 +88,16 @@ export class GnosysUserQuery extends Query<User> {
 // Gnosys user Actions
 
 export const GnosysUserInitAction = createAction('Gnosys Init User');
+
+export const GnosysUserVerifyEmailAction = createAction(
+  'Verify Email',
+  props<{ verification: string }>()
+);
+
+export const GnosysUserLoginAction = createAction(
+  'Login Action',
+  props<{ user: LoginFormData }>()
+);
 
 export const GnosysUserUpdateAction = createAction(
   'Gnosys User Update',
@@ -110,6 +119,7 @@ export class GnosysUserEffects {
     private actions$: Actions,
     private router: Router,
     private gnosysUserService: GnosysUserService,
+    private authService: AuthService,
     private tokenService: TokenService
   ) {}
 
@@ -120,12 +130,46 @@ export class GnosysUserEffects {
     )
   );
 
+  gnosysUserVerifyEmail = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GnosysUserVerifyEmailAction),
+      tap((payload) =>
+        this.authService
+          .verify(payload.verification)
+          .pipe(take(1))
+          .subscribe((user) => {
+            this.actions$.dispatch(GnosysUserUpdateAction({ user }));
+            this.tokenService.saveRefreshToken(user.accessToken);
+            this.tokenService.saveRefreshToken(user.refreshToken);
+            this.tokenService.saveUser(user);
+          })
+      )
+    )
+  );
+
+  gnosysUserLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GnosysUserLoginAction),
+      map((payload) => payload.user),
+      tap((user) =>
+        this.authService
+          .login(user)
+          .pipe(take(1))
+          .subscribe((user) => {
+            this.actions$.dispatch(GnosysUserUpdateAction({ user }));
+            this.tokenService.saveRefreshToken(user.accessToken);
+            this.tokenService.saveRefreshToken(user.refreshToken);
+            this.tokenService.saveUser(user);
+          })
+      )
+    )
+  );
+
   updateGnosysUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(GnosysUserUpdateAction),
       map((payload) => payload.user),
       tap((user) => {
-        console.log('ganmo to spiti sas', user);
         this.gnosysUserService.updateUser({ ...user });
         this.router.navigate(['user']);
       })
@@ -137,6 +181,7 @@ export class GnosysUserEffects {
       ofType(SignOutAction),
       tap(() => {
         console.log('Sign Out');
+        this.actions$.dispatch(GnosysUserInitAction);
         localStorage.removeItem('AkitaStores');
         localStorage.removeItem('auth-token');
         localStorage.removeItem('auth-refreshtoken');

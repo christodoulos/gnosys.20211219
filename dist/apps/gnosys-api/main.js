@@ -2,53 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./apps/gnosys-api/src/app/app.controller.ts":
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-var _a, _b;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AppController = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const app_service_1 = __webpack_require__("./apps/gnosys-api/src/app/app.service.ts");
-const auth_service_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.service.ts");
-const jwt_auth_guard_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/jwt-auth.guard.ts");
-let AppController = class AppController {
-    constructor(appService, authService) {
-        this.appService = appService;
-        this.authService = authService;
-    }
-    getData() {
-        return this.appService.getData();
-    }
-    getProfile(req) {
-        return req.user;
-    }
-};
-tslib_1.__decorate([
-    common_1.Get(),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", []),
-    tslib_1.__metadata("design:returntype", void 0)
-], AppController.prototype, "getData", null);
-tslib_1.__decorate([
-    common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
-    common_1.Get('profile'),
-    tslib_1.__param(0, common_1.Request()),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Object]),
-    tslib_1.__metadata("design:returntype", void 0)
-], AppController.prototype, "getProfile", null);
-AppController = tslib_1.__decorate([
-    common_1.Controller(),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _a : Object, typeof (_b = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _b : Object])
-], AppController);
-exports.AppController = AppController;
-
-
-/***/ }),
-
 /***/ "./apps/gnosys-api/src/app/app.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -61,8 +14,9 @@ const mongoose_1 = __webpack_require__("@nestjs/mongoose");
 const serve_static_1 = __webpack_require__("@nestjs/serve-static");
 const auth_module_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.module.ts");
 const users_module_1 = __webpack_require__("./apps/gnosys-api/src/app/users/users.module.ts");
-const app_controller_1 = __webpack_require__("./apps/gnosys-api/src/app/app.controller.ts");
-const app_service_1 = __webpack_require__("./apps/gnosys-api/src/app/app.service.ts");
+const mail_module_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.module.ts");
+// import { AppController } from './app.controller';
+// import { AppService } from './app.service';
 const path_1 = __webpack_require__("path");
 let AppModule = class AppModule {
 };
@@ -76,33 +30,13 @@ AppModule = tslib_1.__decorate([
             }),
             auth_module_1.AuthModule,
             users_module_1.UsersModule,
+            mail_module_1.MailModule,
         ],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        // controllers: [AppController],
+        // providers: [AppService],
     })
 ], AppModule);
 exports.AppModule = AppModule;
-
-
-/***/ }),
-
-/***/ "./apps/gnosys-api/src/app/app.service.ts":
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AppService = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-let AppService = class AppService {
-    getData() {
-        return { message: 'Welcome to api!' };
-    }
-};
-AppService = tslib_1.__decorate([
-    common_1.Injectable()
-], AppService);
-exports.AppService = AppService;
 
 
 /***/ }),
@@ -272,25 +206,6 @@ exports.jwtConstants = {
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/auth/jwt-auth.guard.ts":
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.JwtAuthGuard = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const passport_1 = __webpack_require__("@nestjs/passport");
-let JwtAuthGuard = class JwtAuthGuard extends passport_1.AuthGuard('jwt') {
-};
-JwtAuthGuard = tslib_1.__decorate([
-    common_1.Injectable()
-], JwtAuthGuard);
-exports.JwtAuthGuard = JwtAuthGuard;
-
-
-/***/ }),
-
 /***/ "./apps/gnosys-api/src/app/auth/jwt.strategy.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -358,6 +273,73 @@ exports.RefreshTokenSchema = new mongoose_1.Schema({
     versionKey: false,
     timestamps: true,
 });
+
+
+/***/ }),
+
+/***/ "./apps/gnosys-api/src/app/mail/mail.module.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.MailModule = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const mail_1 = __webpack_require__("@sendgrid/mail");
+const mail_service_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.service.ts");
+let MailModule = class MailModule {
+};
+MailModule = tslib_1.__decorate([
+    common_1.Module({
+        exports: [mail_service_1.GnosysMailService],
+        providers: [mail_1.MailService, mail_service_1.GnosysMailService],
+    })
+], MailModule);
+exports.MailModule = MailModule;
+
+
+/***/ }),
+
+/***/ "./apps/gnosys-api/src/app/mail/mail.service.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GnosysMailService = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const mail_1 = __webpack_require__("@sendgrid/mail");
+const environment_1 = __webpack_require__("./apps/gnosys-api/src/environments/environment.ts");
+let GnosysMailService = class GnosysMailService {
+    constructor(mailService) {
+        this.mailService = mailService;
+    }
+    sendUserConfirmation(user) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const uuid = user.verification;
+            this.mailService.setApiKey(process.env.SENDGRID_API_KEY);
+            const url = `http://${environment_1.environment.gnosysURL}/api/user/verify/verification=${uuid}`;
+            yield this.mailService.send({
+                to: user.email,
+                from: '"gnosys Support Team" <gnosys@gnosys.tech>',
+                templateId: 'd-1c3af41cf45942e4a42594cb59365aa4',
+                dynamicTemplateData: {
+                    givenName: user.givenName,
+                    url,
+                },
+            });
+        });
+    }
+    gamoToFelekimou(user) {
+        console.log(`o ${user.givenName} einai malakas`);
+    }
+};
+GnosysMailService = tslib_1.__decorate([
+    common_1.Injectable(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mail_1.MailService !== "undefined" && mail_1.MailService) === "function" ? _a : Object])
+], GnosysMailService);
+exports.GnosysMailService = GnosysMailService;
 
 
 /***/ }),
@@ -432,6 +414,26 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", String)
 ], LoginUserDto.prototype, "password", void 0);
 exports.LoginUserDto = LoginUserDto;
+
+
+/***/ }),
+
+/***/ "./apps/gnosys-api/src/app/users/dto/verify-uuid.dto.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.VerifyUuidDto = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const class_validator_1 = __webpack_require__("class-validator");
+class VerifyUuidDto {
+}
+tslib_1.__decorate([
+    class_validator_1.IsNotEmpty(),
+    class_validator_1.IsUUID(),
+    tslib_1.__metadata("design:type", String)
+], VerifyUuidDto.prototype, "verification", void 0);
+exports.VerifyUuidDto = VerifyUuidDto;
 
 
 /***/ }),
@@ -541,7 +543,7 @@ exports.UserSchema.set('versionKey', false);
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersController = void 0;
 const tslib_1 = __webpack_require__("tslib");
@@ -549,6 +551,7 @@ const common_1 = __webpack_require__("@nestjs/common");
 const express_1 = __webpack_require__("express");
 const create_user_dto_1 = __webpack_require__("./apps/gnosys-api/src/app/users/dto/create-user.dto.ts");
 const login_user_dto_1 = __webpack_require__("./apps/gnosys-api/src/app/users/dto/login-user.dto.ts");
+const verify_uuid_dto_1 = __webpack_require__("./apps/gnosys-api/src/app/users/dto/verify-uuid.dto.ts");
 const users_service_1 = __webpack_require__("./apps/gnosys-api/src/app/users/users.service.ts");
 let UsersController = class UsersController {
     constructor(userService) {
@@ -557,6 +560,11 @@ let UsersController = class UsersController {
     register(createUserDto) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return yield this.userService.create(createUserDto);
+        });
+    }
+    verifyEmail(req, verifyUuidDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return yield this.userService.verifyEmail(req, verifyUuidDto);
         });
     }
     login(req, loginUserDto) {
@@ -574,17 +582,25 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", Promise)
 ], UsersController.prototype, "register", null);
 tslib_1.__decorate([
+    common_1.Post('verify'),
+    tslib_1.__param(0, common_1.Req()),
+    tslib_1.__param(1, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _b : Object, typeof (_c = typeof verify_uuid_dto_1.VerifyUuidDto !== "undefined" && verify_uuid_dto_1.VerifyUuidDto) === "function" ? _c : Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UsersController.prototype, "verifyEmail", null);
+tslib_1.__decorate([
     common_1.Post('login'),
     common_1.HttpCode(common_1.HttpStatus.OK),
     tslib_1.__param(0, common_1.Req()),
     tslib_1.__param(1, common_1.Body()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _b : Object, typeof (_c = typeof login_user_dto_1.LoginUserDto !== "undefined" && login_user_dto_1.LoginUserDto) === "function" ? _c : Object]),
+    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _d : Object, typeof (_e = typeof login_user_dto_1.LoginUserDto !== "undefined" && login_user_dto_1.LoginUserDto) === "function" ? _e : Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UsersController.prototype, "login", null);
 UsersController = tslib_1.__decorate([
     common_1.Controller('user'),
-    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _d : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_f = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _f : Object])
 ], UsersController);
 exports.UsersController = UsersController;
 
@@ -604,7 +620,7 @@ const users_controller_1 = __webpack_require__("./apps/gnosys-api/src/app/users/
 const users_service_1 = __webpack_require__("./apps/gnosys-api/src/app/users/users.service.ts");
 const user_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/users/user.schema.ts");
 const auth_module_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.module.ts");
-const mail_1 = __webpack_require__("@sendgrid/mail");
+const mail_module_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.module.ts");
 let UsersModule = class UsersModule {
 };
 UsersModule = tslib_1.__decorate([
@@ -612,9 +628,10 @@ UsersModule = tslib_1.__decorate([
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: user_schema_1.User.name, schema: user_schema_1.UserSchema }]),
             auth_module_1.AuthModule,
+            mail_module_1.MailModule,
         ],
         controllers: [users_controller_1.UsersController],
-        providers: [users_service_1.UsersService, mail_1.MailService],
+        providers: [users_service_1.UsersService],
     })
 ], UsersModule);
 exports.UsersModule = UsersModule;
@@ -638,11 +655,11 @@ const bcrypt = tslib_1.__importStar(__webpack_require__("bcrypt"));
 const mongoose_2 = __webpack_require__("@nestjs/mongoose");
 const user_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/users/user.schema.ts");
 const auth_service_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.service.ts");
-const mail_1 = __webpack_require__("@sendgrid/mail");
+const mail_service_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.service.ts");
 let UsersService = class UsersService {
-    constructor(userModel, mail, authService) {
+    constructor(userModel, mailService, authService) {
         this.userModel = userModel;
-        this.mail = mail;
+        this.mailService = mailService;
         this.authService = authService;
         this.hours_to_verify_signup = 12;
         this.hours_to_verify = 4;
@@ -656,6 +673,22 @@ let UsersService = class UsersService {
             this.setRegistrationInfo(createdUser);
             yield this.sendRegistrationEmail(createdUser);
             return yield createdUser.save();
+        });
+    }
+    verifyEmail(req, veryfyUuidDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const user = yield this.findUserByVerification(veryfyUuidDto.verification);
+            yield this.setUserAsVerified(user);
+            return {
+                email: user.email,
+                givenName: user.givenName,
+                familyName: user.familyName,
+                displayName: `${user.givenName} ${user.familyName}`,
+                emailVerified: user.emailVerified,
+                accessToken: yield this.authService.createAccessToken(user._id),
+                refreshToken: yield this.authService.createRefreshToken(req, user._id),
+                roles: user.roles,
+            };
         });
     }
     login(req, loginUserDto) {
@@ -695,6 +728,19 @@ let UsersService = class UsersService {
     setRegistrationInfo(user) {
         user.verification = uuid_1.v4();
         user.verificationExpires = date_fns_1.addHours(new Date(), this.hours_to_verify);
+    }
+    findUserByVerification(verification) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const user = yield this.userModel.findOne({
+                verification,
+                emailVerified: false,
+                verificationExpires: { $gt: new Date() },
+            });
+            if (!user) {
+                throw new common_1.BadRequestException('Verification Expired.');
+            }
+            return user;
+        });
     }
     findUserByEmail(email) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -737,6 +783,12 @@ let UsersService = class UsersService {
             yield user.save();
         });
     }
+    setUserAsVerified(user) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            user.emailVerified = true;
+            yield user.save();
+        });
+    }
     passwordsDoMatch(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             user.loginAttempts = 0;
@@ -745,32 +797,47 @@ let UsersService = class UsersService {
     }
     sendRegistrationEmail(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            this.mail.setApiKey(process.env.SENDGRID_API_KEY);
-            const msg = {
-                to: user.email,
-                from: 'gnosys@gnosys.tech',
-                subject: 'Complete your registration to Gnosys',
-                text: 'Please follow the link',
-                html: 'Please follow the <a href="www.ntua.gr">link</a>',
-            };
-            try {
-                yield this.mail.send(msg);
-            }
-            catch (error) {
-                console.error(error);
-                if (error.response) {
-                    console.error(error.response.body);
-                }
-            }
+            // this.mail.setApiKey(process.env.SENDGRID_API_KEY);
+            // const msg = {
+            //   to: user.email,
+            //   from: 'gnosys@gnosys.tech',
+            //   subject: 'Complete your registration to Gnosys',
+            //   text: 'Please follow the link',
+            //   html: 'Please follow the <a href="www.ntua.gr">link</a>',
+            // };
+            // try {
+            //   await this.mail.send(msg);
+            // } catch (error) {
+            //   console.error(error);
+            //   if (error.response) {
+            //     console.error(error.response.body);
+            //   }
+            // }
+            // this.mailService.gamoToFelekimou(user as unknown as GnosysUser);
+            yield this.mailService.sendUserConfirmation(user);
         });
     }
 };
 UsersService = tslib_1.__decorate([
     common_1.Injectable(),
     tslib_1.__param(0, mongoose_2.InjectModel(user_schema_1.User.name)),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _a : Object, typeof (_b = typeof mail_1.MailService !== "undefined" && mail_1.MailService) === "function" ? _b : Object, typeof (_c = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _c : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _a : Object, typeof (_b = typeof mail_service_1.GnosysMailService !== "undefined" && mail_service_1.GnosysMailService) === "function" ? _b : Object, typeof (_c = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _c : Object])
 ], UsersService);
 exports.UsersService = UsersService;
+
+
+/***/ }),
+
+/***/ "./apps/gnosys-api/src/environments/environment.ts":
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.environment = void 0;
+exports.environment = {
+    production: false,
+    gnosysURL: 'localhost:4200',
+};
 
 
 /***/ }),

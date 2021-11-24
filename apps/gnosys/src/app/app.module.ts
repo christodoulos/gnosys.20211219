@@ -21,18 +21,21 @@ import { authInterceptorProviders } from './services';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    RouterModule.forRoot([
-      {
-        path: '',
-        loadChildren: () =>
-          import('./landing/landing.module').then((m) => m.LandingModule),
-      },
-      {
-        path: 'user',
-        loadChildren: () =>
-          import('./user/user.module').then((m) => m.UserModule),
-      },
-    ]),
+    RouterModule.forRoot(
+      [
+        {
+          path: '',
+          loadChildren: () =>
+            import('./landing/landing.module').then((m) => m.LandingModule),
+        },
+        {
+          path: 'user',
+          loadChildren: () =>
+            import('./user/user.module').then((m) => m.UserModule),
+        },
+      ],
+      { useHash: true }
+    ),
     HttpClientModule,
     ReactiveFormsModule,
     ErrorTailorModule.forRoot({

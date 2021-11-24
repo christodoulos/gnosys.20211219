@@ -13,19 +13,21 @@ import { LandingTopbarComponent } from './landing-topbar/landing-topbar.componen
 import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
 import { GnosysUserEffects } from '../state';
+import { VerifyComponent } from './verify/verify.component';
 
 export const routes: Route[] = [
   {
     path: '',
     component: LandingComponent,
   },
-  { path: 'signup', component: SignupComponent },
-  { path: 'signin', component: SigninComponent },
   {
     path: '',
     component: LandingTopbarComponent,
     outlet: 'topbar',
   },
+  { path: 'signup', component: SignupComponent },
+  { path: 'signin', component: SigninComponent },
+  { path: 'verify/:verification', component: VerifyComponent },
 ];
 
 @NgModule({
@@ -53,6 +55,7 @@ export const routes: Route[] = [
     LandingTopbarComponent,
     SignupComponent,
     SigninComponent,
+    VerifyComponent,
   ],
 })
 export class LandingModule {}

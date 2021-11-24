@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Actions } from '@datorama/akita-ng-effects';
 import { SignOutAction } from '../../state';
 
@@ -6,10 +6,8 @@ import { SignOutAction } from '../../state';
   templateUrl: './user-landing.component.html',
   styleUrls: ['./user-landing.component.css'],
 })
-export class UserLandingComponent implements OnInit {
+export class UserLandingComponent {
   constructor(private actions: Actions) {}
-
-  ngOnInit(): void {}
 
   logout() {
     this.actions.dispatch(SignOutAction);

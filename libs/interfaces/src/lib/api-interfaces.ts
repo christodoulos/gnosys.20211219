@@ -12,6 +12,7 @@ export interface User {
   emailVerified: boolean;
   accessToken: string;
   refreshToken: string;
+  verification: string;
   roles?: [string];
 }
 
