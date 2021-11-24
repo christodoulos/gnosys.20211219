@@ -1,24 +1,6 @@
 {
-  "cli": {
-    "analytics": false
-  },
   "version": 1,
   "projects": {
-    "api-interfaces": {
-      "root": "libs/api-interfaces",
-      "sourceRoot": "libs/api-interfaces/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
-          }
-        }
-      },
-      "tags": []
-    },
     "gnosys": {
       "projectType": "application",
       "root": "apps/gnosys",

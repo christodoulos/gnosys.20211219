@@ -319,10 +319,10 @@ let GnosysMailService = class GnosysMailService {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const uuid = user.verification;
             this.mailService.setApiKey(process.env.SENDGRID_API_KEY);
-            const url = `http://${environment_1.environment.gnosysURL}/api/user/verify/verification=${uuid}`;
+            const url = `http://${environment_1.environment.gnosysURL}/api/user/verify/${uuid}`;
             yield this.mailService.send({
                 to: user.email,
-                from: '"gnosys Support Team" <gnosys@gnosys.tech>',
+                from: 'gnosys Support Team <gnosys@gnosys.tech>',
                 templateId: 'd-1c3af41cf45942e4a42594cb59365aa4',
                 dynamicTemplateData: {
                     givenName: user.givenName,
@@ -330,9 +330,6 @@ let GnosysMailService = class GnosysMailService {
                 },
             });
         });
-    }
-    gamoToFelekimou(user) {
-        console.log(`o ${user.givenName} einai malakas`);
     }
 };
 GnosysMailService = tslib_1.__decorate([

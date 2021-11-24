@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SignUpFormData } from '@gnosys/api-interfaces';
+import { SignUpFormData } from '@gnosys/interfaces';
 
 @Injectable({
   providedIn: 'root',

@@ -15,7 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@gnosys/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@gnosys/interfaces": ["libs/interfaces/src/index.ts"],
       "@gnosys/ui": ["libs/ui/src/index.ts"]
     }

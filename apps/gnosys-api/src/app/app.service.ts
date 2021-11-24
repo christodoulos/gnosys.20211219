@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Message } from '@gnosys/api-interfaces';
+import { Message } from '@gnosys/interfaces';
 
 @Injectable()
 export class AppService {
