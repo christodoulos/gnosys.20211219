@@ -7,8 +7,7 @@
     "@ngneat/reactive-forms": "^3.1.3",
     "@gnosys/interfaces": "0.0.1",
     "lodash": "^4.17.21",
-    "@angular/forms": "^12.2.0",
-    "@ngneat/svg-icon": "^3.3.0"
+    "@angular/forms": "^12.2.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

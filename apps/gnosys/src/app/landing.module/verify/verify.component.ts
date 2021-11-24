@@ -18,6 +18,7 @@ export class VerifyComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log('In verify component');
     this.params
       .pipe(take(1))
       .subscribe((verification) =>

@@ -35,6 +35,7 @@ export const initGnosysUser: User = {
   verification: '',
   accessToken: '',
   refreshToken: '',
+  loading: false,
 };
 
 @Injectable({ providedIn: 'root' })
@@ -53,6 +54,9 @@ export class GnosysUserService {
   updateUser(user: Partial<User>) {
     this.store.update({ ...user });
   }
+  setloading(isloading: boolean) {
+    this.store.update({ loading: isloading });
+  }
 }
 
 // Gnosys user Query
@@ -68,6 +72,7 @@ export class GnosysUserQuery extends Query<User> {
   givenName$ = this.select((state) => state.givenName);
   roles$ = this.select((state) => state.roles);
   email$ = this.select((state) => state.email);
+  loading$ = this.select((state) => state.loading);
   accessToken$ = this.select((state) => state.accessToken);
   accessTokenExpired$ = this.select((state) =>
     this.isJWTExpired(state.accessToken)
@@ -92,6 +97,11 @@ export const GnosysUserInitAction = createAction('Gnosys Init User');
 export const GnosysUserVerifyEmailAction = createAction(
   'Verify Email',
   props<{ verification: string }>()
+);
+
+export const UserSetLoadingAction = createAction(
+  'Set User Loading',
+  props<{ isloading: boolean }>()
 );
 
 export const GnosysUserLoginAction = createAction(
@@ -130,6 +140,13 @@ export class GnosysUserEffects {
     )
   );
 
+  gnosysUserIsLoading = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserSetLoadingAction),
+      tap((payload) => this.gnosysUserService.setloading(payload.isloading))
+    )
+  );
+
   gnosysUserVerifyEmail = createEffect(() =>
     this.actions$.pipe(
       ofType(GnosysUserVerifyEmailAction),
@@ -152,6 +169,9 @@ export class GnosysUserEffects {
       ofType(GnosysUserLoginAction),
       map((payload) => payload.user),
       tap((user) =>
+        this.actions$.dispatch(UserSetLoadingAction({ isloading: true }))
+      ),
+      tap((user) =>
         this.authService
           .login(user)
           .pipe(take(1))
@@ -161,6 +181,9 @@ export class GnosysUserEffects {
             this.tokenService.saveRefreshToken(user.refreshToken);
             this.tokenService.saveUser(user);
           })
+      ),
+      tap((user) =>
+        this.actions$.dispatch(UserSetLoadingAction({ isloading: false }))
       )
     )
   );

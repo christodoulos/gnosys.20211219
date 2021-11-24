@@ -12,7 +12,7 @@ export class GnosysMailService {
     const uuid = user.verification;
     this.mailService.setApiKey(process.env.SENDGRID_API_KEY);
 
-    const url = `http://${environment.gnosysURL}/api/user/verify/${uuid}`;
+    const url = `http://${environment.gnosysURL}/#/verify/${uuid}`;
 
     await this.mailService.send({
       to: user.email,

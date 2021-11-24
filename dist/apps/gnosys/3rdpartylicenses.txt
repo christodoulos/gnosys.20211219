@@ -28,11 +28,7 @@ Apache-2.0
 @datorama/akita-ngdevtools
 Apache-2.0
 
-@ngneat/error-tailor
-MIT
-
-@ngneat/svg-icon
-MIT
+@gnosys/ui
 
 jwt-decode
 MIT

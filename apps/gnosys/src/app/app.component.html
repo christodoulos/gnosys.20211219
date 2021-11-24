@@ -1,6 +1,7 @@
 <div class="flex h-screen">
   <div class="m-auto">
     <router-outlet name="topbar"></router-outlet>
+    <ui-loading *ngIf="loading$ | async"></ui-loading>
     <div class="bg-gray-100 p-3">
       <router-outlet></router-outlet>
     </div>

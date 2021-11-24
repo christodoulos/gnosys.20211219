@@ -10,6 +10,8 @@ export interface User {
     emailVerified: boolean;
     accessToken: string;
     refreshToken: string;
+    verification: string;
+    loading: boolean;
     roles?: [string];
 }
 export interface LoginFormData {

@@ -3,10 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ErrorTailorModule } from '@ngneat/error-tailor';
-import { SvgIconsModule } from '@ngneat/svg-icon';
+
+import { UiModule } from '@gnosys/ui';
 
 import { AppComponent } from './app.component';
+
 import { NG_ENTITY_SERVICE_CONFIG } from '@datorama/akita-ng-entity-service';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
@@ -40,7 +41,7 @@ import { authInterceptorProviders } from './services';
     ),
     HttpClientModule,
     ReactiveFormsModule,
-
+    UiModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     AkitaNgRouterStoreModule,
     AkitaNgEffectsModule.forRoot([GnosysUserEffects]),
