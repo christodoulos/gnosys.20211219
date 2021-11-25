@@ -3,7 +3,10 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { Validators } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, map } from 'rxjs';
-import { LandingService } from '../landing.service';
+import { Actions } from '@datorama/akita-ng-effects';
+
+import { UserSignUpAction } from '../../state';
+import { SignUpFormData } from '@gnosys/interfaces';
 
 @Component({
   templateUrl: './signup.component.html',
@@ -22,7 +25,7 @@ export class SignupComponent implements OnInit {
     confirmPassword: new FormControl('', Validators.required),
   });
 
-  constructor(private service: LandingService) {}
+  constructor(private actions: Actions) {}
 
   ngOnInit(): void {
     combineLatest([
@@ -48,13 +51,9 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      const data = {
-        email: this.form.value.email,
-        password: this.form.value.password,
-        givenName: this.form.value.firstName,
-        familyName: this.form.value.lastName,
-      };
-      this.service.signup(data);
+      this.actions.dispatch(
+        UserSignUpAction({ data: this.form.value as SignUpFormData })
+      );
     }
   }
 }

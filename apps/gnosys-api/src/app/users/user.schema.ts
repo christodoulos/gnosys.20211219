@@ -20,11 +20,11 @@ export class User {
   @Prop({ maxlength: 1024, minlength: 8, required: [true, 'BLANK_PASSWORD'] })
   password: string;
 
-  @Prop({ required: [true, 'BLANK_GIVEN_NAME'] })
-  givenName: string;
+  @Prop({ required: [true, 'BLANK_FIRST_NAME'] })
+  firstName: string;
 
-  @Prop({ required: [true, 'BLANK_FAMILY_NAME'] })
-  familyName: string;
+  @Prop({ required: [true, 'BLANK_LAST_NAME'] })
+  lastName: string;
 
   @Prop({ default: ['user'] })
   roles: [string];
@@ -65,7 +65,7 @@ UserSchema.virtual('uid').get(function () {
 });
 
 UserSchema.virtual('displayName').get(function () {
-  return `${this.givenName} ${this.familyName}`;
+  return `${this.firstName} ${this.lastName}`;
 });
 
 UserSchema.set('toJSON', {

@@ -168,7 +168,7 @@ export class GnosysUserEffects {
     this.actions$.pipe(
       ofType(GnosysUserLoginAction),
       map((payload) => payload.user),
-      tap((user) =>
+      tap(() =>
         this.actions$.dispatch(UserSetLoadingAction({ isloading: true }))
       ),
       tap((user) =>
@@ -176,14 +176,12 @@ export class GnosysUserEffects {
           .login(user)
           .pipe(take(1))
           .subscribe((user) => {
-            this.actions$.dispatch(GnosysUserUpdateAction({ user }));
             this.tokenService.saveRefreshToken(user.accessToken);
             this.tokenService.saveRefreshToken(user.refreshToken);
             this.tokenService.saveUser(user);
+            this.actions$.dispatch(GnosysUserUpdateAction({ user }));
+            this.actions$.dispatch(UserSetLoadingAction({ isloading: false }));
           })
-      ),
-      tap((user) =>
-        this.actions$.dispatch(UserSetLoadingAction({ isloading: false }))
       )
     )
   );

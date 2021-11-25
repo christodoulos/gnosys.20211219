@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { User, LoginFormData } from '@gnosys/interfaces';
+import { User, LoginFormData, SignUpFormData } from '@gnosys/interfaces';
 import { TokenService } from '.';
 
 const AUTH_API = '/api/user/';
@@ -19,6 +19,10 @@ export class AuthService {
 
   login(data: LoginFormData): Observable<User> {
     return this.http.post<User>(`${AUTH_API}login`, data, httpOptions);
+  }
+
+  signup(data: SignUpFormData): Observable<User> {
+    return this.http.post<User>(AUTH_API, data, httpOptions);
   }
 
   verify(verification: string): Observable<User> {

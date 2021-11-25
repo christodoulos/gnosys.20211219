@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { GnosysUserQuery } from './state';
+import { UserQuery } from './state';
 
 @Component({
   selector: 'gnosys-root',
@@ -8,5 +8,5 @@ import { GnosysUserQuery } from './state';
 })
 export class AppComponent {
   loading$ = this.userQuery.loading$;
-  constructor(private userQuery: GnosysUserQuery) {}
+  constructor(private userQuery: UserQuery) {}
 }

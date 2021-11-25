@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Actions } from '@datorama/akita-ng-effects';
-import { SignOutAction } from '../../state';
+import { UserSignOutAction } from '../../state';
 
 @Component({
   templateUrl: './user-landing.component.html',
@@ -10,6 +10,6 @@ export class UserLandingComponent {
   constructor(private actions: Actions) {}
 
   logout() {
-    this.actions.dispatch(SignOutAction);
+    this.actions.dispatch(UserSignOutAction);
   }
 }

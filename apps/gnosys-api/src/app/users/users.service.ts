@@ -45,9 +45,9 @@ export class UsersService {
     await this.setUserAsVerified(user);
     return {
       email: user.email,
-      givenName: user.givenName,
-      familyName: user.familyName,
-      displayName: `${user.givenName} ${user.familyName}`,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      displayName: `${user.firstName} ${user.lastName}`,
       emailVerified: user.emailVerified,
       accessToken: await this.authService.createAccessToken(user._id),
       refreshToken: await this.authService.createRefreshToken(req, user._id),
@@ -62,9 +62,9 @@ export class UsersService {
     await this.passwordsDoMatch(user);
     return {
       email: user.email,
-      givenName: user.givenName,
-      familyName: user.familyName,
-      displayName: `${user.givenName} ${user.familyName}`,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      displayName: `${user.firstName} ${user.lastName}`,
       emailVerified: user.emailVerified,
       accessToken: await this.authService.createAccessToken(user._id),
       refreshToken: await this.authService.createRefreshToken(req, user._id),
@@ -155,23 +155,6 @@ export class UsersService {
   }
 
   private async sendRegistrationEmail(user: UserDocument) {
-    // this.mail.setApiKey(process.env.SENDGRID_API_KEY);
-    // const msg = {
-    //   to: user.email,
-    //   from: 'gnosys@gnosys.tech',
-    //   subject: 'Complete your registration to Gnosys',
-    //   text: 'Please follow the link',
-    //   html: 'Please follow the <a href="www.ntua.gr">link</a>',
-    // };
-    // try {
-    //   await this.mail.send(msg);
-    // } catch (error) {
-    //   console.error(error);
-    //   if (error.response) {
-    //     console.error(error.response.body);
-    //   }
-    // }
-    // this.mailService.gamoToFelekimou(user as unknown as GnosysUser);
     await this.mailService.sendUserConfirmation(user as unknown as GnosysUser);
   }
 }

@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { GnosysUserQuery } from '../../state';
+import { UserQuery } from '../../state';
 
 @Component({
   templateUrl: './user-topbar.component.html',
   styleUrls: ['./user-topbar.component.css'],
 })
 export class UserTopbarComponent {
-  constructor(private userQuery: GnosysUserQuery) {}
+  constructor(private userQuery: UserQuery) {}
 
   displayName$ = this.userQuery.displayName$;
 }

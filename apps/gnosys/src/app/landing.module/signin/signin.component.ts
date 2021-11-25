@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { Validators } from '@angular/forms';
 
 import { Actions } from '@datorama/akita-ng-effects';
-import { GnosysUserLoginAction } from '../../state';
+import { UserLoginAction } from '../../state';
 
 @Component({
   templateUrl: './signin.component.html',
@@ -17,6 +17,6 @@ export class SigninComponent {
   constructor(private actions: Actions) {}
 
   onSignIn() {
-    this.actions.dispatch(GnosysUserLoginAction({ user: this.form.value }));
+    this.actions.dispatch(UserLoginAction({ user: this.form.value }));
   }
 }
