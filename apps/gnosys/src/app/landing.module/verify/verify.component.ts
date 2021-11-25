@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Actions } from '@datorama/akita-ng-effects';
 import { RouterQuery } from '@datorama/akita-ng-router-store';
 import { take } from 'rxjs/operators';
-import { AuthService } from '../../services';
 import { UserVerifyEmailAction } from '../../state';
 
 @Component({
@@ -11,11 +10,7 @@ import { UserVerifyEmailAction } from '../../state';
 })
 export class VerifyComponent implements OnInit {
   params = this.query.selectParams();
-  constructor(
-    private actions: Actions,
-    private query: RouterQuery,
-    private auth: AuthService
-  ) {}
+  constructor(private actions: Actions, private query: RouterQuery) {}
 
   ngOnInit(): void {
     console.log('In verify component');

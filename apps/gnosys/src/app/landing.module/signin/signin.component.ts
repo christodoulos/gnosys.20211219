@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { Validators } from '@angular/forms';
 
 import { Actions } from '@datorama/akita-ng-effects';
-import { UserLoginAction } from '../../state';
+import { UserLoginAction, UserForgotPasswordAction } from '../../state';
 
 @Component({
   templateUrl: './signin.component.html',
@@ -18,5 +18,11 @@ export class SigninComponent {
 
   onSignIn() {
     this.actions.dispatch(UserLoginAction({ user: this.form.value }));
+  }
+
+  onForgotPassword() {
+    this.actions.dispatch(
+      UserForgotPasswordAction({ email: this.form.controls.email.value })
+    );
   }
 }

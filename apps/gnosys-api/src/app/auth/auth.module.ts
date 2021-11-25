@@ -4,7 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from '../users/user.schema';
+import { UserSchema } from '../users/schemas/user.schema';
 import { RefreshTokenSchema } from './refresh-token-schema';
 
 @Module({

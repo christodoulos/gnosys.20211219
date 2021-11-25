@@ -10,7 +10,7 @@ import * as Actions from './user.actions';
 import { AuthService, TokenService } from '../../services';
 import { map, take, tap } from 'rxjs/operators';
 import { initGnosysUser } from './user.model';
-import { UserSignUpAction } from '.';
+import { AlertSuccessAction } from '..';
 
 @Injectable({ providedIn: 'root' })
 export class GnosysUserEffects {
@@ -39,18 +39,23 @@ export class GnosysUserEffects {
   UserVerifyEmailEffect = createEffect(() =>
     this.actions.pipe(
       ofType(Actions.UserVerifyEmailAction),
-      tap((payload) =>
+      tap((payload) => {
+        this.router.navigate(['']);
         this.authService
           .verify(payload.verification)
           .pipe(take(1))
           .subscribe((user) => {
-            // Potential routing problem here ...?
-            this.actions.dispatch(Actions.UserUpdateAction({ user }));
-            this.tokenService.saveRefreshToken(user.accessToken);
-            this.tokenService.saveRefreshToken(user.refreshToken);
-            this.tokenService.saveUser(user);
-          })
-      )
+            if (user) {
+              this.actions.dispatch(
+                AlertSuccessAction({
+                  header: `${user.firstName} thanks for verifying`,
+                  message: 'Start using gnosys right now',
+                })
+              );
+            }
+            this.router.navigate(['signin']);
+          });
+      })
     )
   );
 
@@ -58,9 +63,6 @@ export class GnosysUserEffects {
     this.actions.pipe(
       ofType(Actions.UserLoginAction),
       map((payload) => payload.user),
-      tap(() =>
-        this.actions.dispatch(Actions.UserIsLoadingAction({ isloading: true }))
-      ),
       tap((user) =>
         this.authService
           .login(user)
@@ -70,32 +72,45 @@ export class GnosysUserEffects {
             this.tokenService.saveRefreshToken(user.refreshToken);
             this.tokenService.saveUser(user);
             this.actions.dispatch(Actions.UserUpdateAction({ user }));
-            this.actions.dispatch(
-              Actions.UserIsLoadingAction({ isloading: false })
-            );
           })
       )
     )
   );
 
+  UserForgotPasswordEffect = createEffect(() =>
+    this.actions.pipe(
+      ofType(Actions.UserForgotPasswordAction),
+      tap((payload) => {
+        this.authService
+          .forgot(payload.email)
+          .pipe(take(1))
+          .subscribe((forgotPassword) => {
+            this.actions.dispatch(
+              AlertSuccessAction({
+                message: `If ${forgotPassword.email} is a real gnosys user, you will soon receive a reset link.`,
+              })
+            );
+          });
+      })
+    )
+  );
+
   UserSignUpEffect = createEffect(() =>
     this.actions.pipe(
-      ofType(UserSignUpAction),
+      ofType(Actions.UserSignUpAction),
       map((payload) => payload.data),
-      tap(() =>
-        this.actions.dispatch(Actions.UserIsLoadingAction({ isloading: true }))
-      ),
       tap((data) =>
         this.authService
           .signup(data)
           .pipe(take(1))
           .subscribe((user) => {
-            // Show message for successful or not registration
-            // or better handle that in the interceptor
-            this.router.navigate([]);
             this.actions.dispatch(
-              Actions.UserIsLoadingAction({ isloading: false })
+              AlertSuccessAction({
+                header: `${user.firstName} thanks for registering`,
+                message: `Please verify ${user.email} first.`,
+              })
             );
+            this.router.navigate(['']);
           })
       )
     )
@@ -125,28 +140,4 @@ export class GnosysUserEffects {
       })
     )
   );
-
-  //   updateGnosysUser$ = createEffect(() =>
-  //     this.actions$.pipe(
-  //       ofType(GnosysUserUpdateAction),
-  //       map((payload) => this.query.userDoc(payload.uid)),
-  //       tap((doc) =>
-  //         doc.pipe(take(1)).subscribe((user) => {
-  //           console.log('Update Gnosys User Effect', user);
-  //           this.gnosysUserService.updateUser(user as GnosysUser);
-  //         })
-  //       )
-  //     )
-  //   );
-
-  //   signupUser$ = createEffect(() =>
-  //     this.actions$.pipe(
-  //       ofType(GnosysUserSignUpAction),
-  //       tap((payload) => {
-  //         console.log('Signup Action Effect');
-  //         this.query.updateUsersDoc(payload.data);
-  //         this.router.navigate(['user']);
-  //       })
-  //     )
-  //   );
 }

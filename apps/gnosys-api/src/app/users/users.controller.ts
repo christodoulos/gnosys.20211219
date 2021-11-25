@@ -7,9 +7,9 @@ import {
   Req,
   HttpCode,
   HttpStatus,
-  HttpException,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { CreateForgotPasswordDto } from './dto/create-forgot-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { VerifyUuidDto } from './dto/verify-uuid.dto';
@@ -34,5 +34,14 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   async login(@Req() req: Request, @Body() loginUserDto: LoginUserDto) {
     return await this.userService.login(req, loginUserDto);
+  }
+
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  async forgotPassword(
+    @Req() req: Request,
+    @Body() createForfotPasswordDto: CreateForgotPasswordDto
+  ) {
+    return await this.userService.forgotPassword(req, createForfotPasswordDto);
   }
 }

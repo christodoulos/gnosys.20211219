@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { User, LoginFormData, SignUpFormData } from '@gnosys/interfaces';
+import {
+  User,
+  ForgotPassword,
+  LoginFormData,
+  SignUpFormData,
+} from '@gnosys/interfaces';
 import { TokenService } from '.';
 
 const AUTH_API = '/api/user/';
@@ -29,6 +34,14 @@ export class AuthService {
     return this.http.post<User>(
       `${AUTH_API}verify`,
       { verification },
+      httpOptions
+    );
+  }
+
+  forgot(email: string): Observable<ForgotPassword> {
+    return this.http.post<ForgotPassword>(
+      `${AUTH_API}forgot-password`,
+      { email },
       httpOptions
     );
   }

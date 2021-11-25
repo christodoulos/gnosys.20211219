@@ -18,6 +18,11 @@ export const UserLoginAction = createAction(
   props<{ user: LoginFormData }>()
 );
 
+export const UserForgotPasswordAction = createAction(
+  'Forgot Password',
+  props<{ email: string }>()
+);
+
 export const UserUpdateAction = createAction(
   'Gnosys User Update',
   props<{ user: User }>()

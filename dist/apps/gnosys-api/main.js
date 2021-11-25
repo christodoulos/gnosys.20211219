@@ -2,22 +2,22 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 624:
+/***/ "./apps/gnosys-api/src/app/app.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppModule = void 0;
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const mongoose_1 = __webpack_require__(794);
-const serve_static_1 = __webpack_require__(385);
-const auth_module_1 = __webpack_require__(343);
-const users_module_1 = __webpack_require__(728);
-const mail_module_1 = __webpack_require__(644);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const serve_static_1 = __webpack_require__("@nestjs/serve-static");
+const auth_module_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.module.ts");
+const users_module_1 = __webpack_require__("./apps/gnosys-api/src/app/users/users.module.ts");
+const mail_module_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.module.ts");
 // import { AppController } from './app.controller';
 // import { AppService } from './app.service';
-const path_1 = __webpack_require__(17);
+const path_1 = __webpack_require__("path");
 let AppModule = class AppModule {
 };
 AppModule = tslib_1.__decorate([
@@ -41,21 +41,21 @@ exports.AppModule = AppModule;
 
 /***/ }),
 
-/***/ 343:
+/***/ "./apps/gnosys-api/src/app/auth/auth.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthModule = void 0;
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const auth_service_1 = __webpack_require__(271);
-const passport_1 = __webpack_require__(340);
-const jwt_1 = __webpack_require__(64);
-const jwt_strategy_1 = __webpack_require__(30);
-const mongoose_1 = __webpack_require__(794);
-const user_schema_1 = __webpack_require__(359);
-const refresh_token_schema_1 = __webpack_require__(333);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const auth_service_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.service.ts");
+const passport_1 = __webpack_require__("@nestjs/passport");
+const jwt_1 = __webpack_require__("@nestjs/jwt");
+const jwt_strategy_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/jwt.strategy.ts");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const user_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/users/schemas/user.schema.ts");
+const refresh_token_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/refresh-token-schema.ts");
 let AuthModule = class AuthModule {
 };
 AuthModule = tslib_1.__decorate([
@@ -80,22 +80,22 @@ exports.AuthModule = AuthModule;
 
 /***/ }),
 
-/***/ 271:
+/***/ "./apps/gnosys-api/src/app/auth/auth.service.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthService = void 0;
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const jwt_1 = __webpack_require__(64);
-const jsonwebtoken_1 = __webpack_require__(344);
-const mongoose_1 = __webpack_require__(794);
-const mongoose_2 = __webpack_require__(185);
-const cryptr_1 = tslib_1.__importDefault(__webpack_require__(607));
-const uuid_1 = __webpack_require__(828);
-const request_ip_1 = __webpack_require__(316);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const jwt_1 = __webpack_require__("@nestjs/jwt");
+const jsonwebtoken_1 = __webpack_require__("jsonwebtoken");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const mongoose_2 = __webpack_require__("mongoose");
+const cryptr_1 = tslib_1.__importDefault(__webpack_require__("cryptr"));
+const uuid_1 = __webpack_require__("uuid");
+const request_ip_1 = __webpack_require__("request-ip");
 let AuthService = class AuthService {
     constructor(userModel, refreshTokenModel, jwtService) {
         this.userModel = userModel;
@@ -193,7 +193,7 @@ exports.AuthService = AuthService;
 
 /***/ }),
 
-/***/ 525:
+/***/ "./apps/gnosys-api/src/app/auth/constants.ts":
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -206,17 +206,17 @@ exports.jwtConstants = {
 
 /***/ }),
 
-/***/ 30:
+/***/ "./apps/gnosys-api/src/app/auth/jwt.strategy.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.JwtStrategy = void 0;
-const tslib_1 = __webpack_require__(752);
-const passport_jwt_1 = __webpack_require__(136);
-const passport_1 = __webpack_require__(340);
-const common_1 = __webpack_require__(481);
-const constants_1 = __webpack_require__(525);
+const tslib_1 = __webpack_require__("tslib");
+const passport_jwt_1 = __webpack_require__("passport-jwt");
+const passport_1 = __webpack_require__("@nestjs/passport");
+const common_1 = __webpack_require__("@nestjs/common");
+const constants_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/constants.ts");
 let JwtStrategy = class JwtStrategy extends passport_1.PassportStrategy(passport_jwt_1.Strategy) {
     constructor() {
         super({
@@ -240,13 +240,13 @@ exports.JwtStrategy = JwtStrategy;
 
 /***/ }),
 
-/***/ 333:
+/***/ "./apps/gnosys-api/src/app/auth/refresh-token-schema.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RefreshTokenSchema = void 0;
-const mongoose_1 = __webpack_require__(185);
+const mongoose_1 = __webpack_require__("mongoose");
 exports.RefreshTokenSchema = new mongoose_1.Schema({
     userId: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -277,16 +277,16 @@ exports.RefreshTokenSchema = new mongoose_1.Schema({
 
 /***/ }),
 
-/***/ 644:
+/***/ "./apps/gnosys-api/src/app/mail/mail.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MailModule = void 0;
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const mail_1 = __webpack_require__(139);
-const mail_service_1 = __webpack_require__(148);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const mail_1 = __webpack_require__("@sendgrid/mail");
+const mail_service_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.service.ts");
 let MailModule = class MailModule {
 };
 MailModule = tslib_1.__decorate([
@@ -300,17 +300,17 @@ exports.MailModule = MailModule;
 
 /***/ }),
 
-/***/ 148:
+/***/ "./apps/gnosys-api/src/app/mail/mail.service.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GnosysMailService = void 0;
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const mail_1 = __webpack_require__(139);
-const environment_1 = __webpack_require__(530);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const mail_1 = __webpack_require__("@sendgrid/mail");
+const environment_1 = __webpack_require__("./apps/gnosys-api/src/environments/environment.ts");
 let GnosysMailService = class GnosysMailService {
     constructor(mailService) {
         this.mailService = mailService;
@@ -331,6 +331,19 @@ let GnosysMailService = class GnosysMailService {
             });
         });
     }
+    sendPasswordResetLink(forgotPassword) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const uuid = forgotPassword.verification;
+            this.mailService.setApiKey(process.env.SENDGRID_API_KEY);
+            const url = `http://${environment_1.environment.gnosysURL}/#/reset/${uuid}`;
+            yield this.mailService.send({
+                to: forgotPassword.email,
+                from: 'gnosys Support Team <gnosys@gnosys.tech>',
+                templateId: 'd-a1208720734d4abd877de89f90904c4f',
+                dynamicTemplateData: { url },
+            });
+        });
+    }
 };
 GnosysMailService = tslib_1.__decorate([
     common_1.Injectable(),
@@ -341,14 +354,37 @@ exports.GnosysMailService = GnosysMailService;
 
 /***/ }),
 
-/***/ 842:
+/***/ "./apps/gnosys-api/src/app/users/dto/create-forgot-password.dto.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CreateForgotPasswordDto = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const class_validator_1 = __webpack_require__("class-validator");
+class CreateForgotPasswordDto {
+}
+tslib_1.__decorate([
+    class_validator_1.IsNotEmpty(),
+    class_validator_1.IsString(),
+    class_validator_1.MinLength(5),
+    class_validator_1.MaxLength(255),
+    class_validator_1.IsEmail(),
+    tslib_1.__metadata("design:type", String)
+], CreateForgotPasswordDto.prototype, "email", void 0);
+exports.CreateForgotPasswordDto = CreateForgotPasswordDto;
+
+
+/***/ }),
+
+/***/ "./apps/gnosys-api/src/app/users/dto/create-user.dto.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CreateUserDto = void 0;
-const tslib_1 = __webpack_require__(752);
-const class_validator_1 = __webpack_require__(849);
+const tslib_1 = __webpack_require__("tslib");
+const class_validator_1 = __webpack_require__("class-validator");
 class CreateUserDto {
 }
 tslib_1.__decorate([
@@ -385,14 +421,14 @@ exports.CreateUserDto = CreateUserDto;
 
 /***/ }),
 
-/***/ 557:
+/***/ "./apps/gnosys-api/src/app/users/dto/login-user.dto.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LoginUserDto = void 0;
-const tslib_1 = __webpack_require__(752);
-const class_validator_1 = __webpack_require__(849);
+const tslib_1 = __webpack_require__("tslib");
+const class_validator_1 = __webpack_require__("class-validator");
 class LoginUserDto {
 }
 tslib_1.__decorate([
@@ -415,14 +451,14 @@ exports.LoginUserDto = LoginUserDto;
 
 /***/ }),
 
-/***/ 42:
+/***/ "./apps/gnosys-api/src/app/users/dto/verify-uuid.dto.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VerifyUuidDto = void 0;
-const tslib_1 = __webpack_require__(752);
-const class_validator_1 = __webpack_require__(849);
+const tslib_1 = __webpack_require__("tslib");
+const class_validator_1 = __webpack_require__("class-validator");
 class VerifyUuidDto {
 }
 tslib_1.__decorate([
@@ -435,17 +471,87 @@ exports.VerifyUuidDto = VerifyUuidDto;
 
 /***/ }),
 
-/***/ 359:
+/***/ "./apps/gnosys-api/src/app/users/schemas/forgot-password.schema.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ForgotPasswordSchema = exports.ForgotPassword = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const validator_1 = tslib_1.__importDefault(__webpack_require__("validator"));
+let ForgotPassword = class ForgotPassword {
+};
+tslib_1.__decorate([
+    mongoose_1.Prop({
+        required: [true, 'Email is blank'],
+        validate: validator_1.default.isEmail,
+    }),
+    tslib_1.__metadata("design:type", String)
+], ForgotPassword.prototype, "email", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({ required: true, validate: validator_1.default.isUUID }),
+    tslib_1.__metadata("design:type", String)
+], ForgotPassword.prototype, "verification", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({ default: false }),
+    tslib_1.__metadata("design:type", Boolean)
+], ForgotPassword.prototype, "firstUsed", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({ default: false }),
+    tslib_1.__metadata("design:type", Boolean)
+], ForgotPassword.prototype, "finalUsed", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({ required: true }),
+    tslib_1.__metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], ForgotPassword.prototype, "expires", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({ required: true }),
+    tslib_1.__metadata("design:type", String)
+], ForgotPassword.prototype, "ip", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({ required: true }),
+    tslib_1.__metadata("design:type", String)
+], ForgotPassword.prototype, "browser", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop({ required: true }),
+    tslib_1.__metadata("design:type", String)
+], ForgotPassword.prototype, "country", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop(),
+    tslib_1.__metadata("design:type", String)
+], ForgotPassword.prototype, "ipChanged", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop(),
+    tslib_1.__metadata("design:type", String)
+], ForgotPassword.prototype, "browserChanged", void 0);
+tslib_1.__decorate([
+    mongoose_1.Prop(),
+    tslib_1.__metadata("design:type", String)
+], ForgotPassword.prototype, "countryChanged", void 0);
+ForgotPassword = tslib_1.__decorate([
+    mongoose_1.Schema()
+], ForgotPassword);
+exports.ForgotPassword = ForgotPassword;
+exports.ForgotPasswordSchema = mongoose_1.SchemaFactory.createForClass(ForgotPassword);
+exports.ForgotPasswordSchema.set('timestamps', true);
+exports.ForgotPasswordSchema.set('versionKey', false);
+
+
+/***/ }),
+
+/***/ "./apps/gnosys-api/src/app/users/schemas/user.schema.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserSchema = exports.User = void 0;
-const tslib_1 = __webpack_require__(752);
-const mongoose_1 = __webpack_require__(794);
-const validator_1 = tslib_1.__importDefault(__webpack_require__(564));
-const bcrypt = tslib_1.__importStar(__webpack_require__(96));
+const tslib_1 = __webpack_require__("tslib");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const validator_1 = tslib_1.__importDefault(__webpack_require__("validator"));
+const bcrypt = tslib_1.__importStar(__webpack_require__("bcrypt"));
 let User = class User {
 };
 tslib_1.__decorate([
@@ -536,20 +642,21 @@ exports.UserSchema.set('versionKey', false);
 
 /***/ }),
 
-/***/ 302:
+/***/ "./apps/gnosys-api/src/app/users/users.controller.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersController = void 0;
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const express_1 = __webpack_require__(860);
-const create_user_dto_1 = __webpack_require__(842);
-const login_user_dto_1 = __webpack_require__(557);
-const verify_uuid_dto_1 = __webpack_require__(42);
-const users_service_1 = __webpack_require__(510);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const express_1 = __webpack_require__("express");
+const create_forgot_password_dto_1 = __webpack_require__("./apps/gnosys-api/src/app/users/dto/create-forgot-password.dto.ts");
+const create_user_dto_1 = __webpack_require__("./apps/gnosys-api/src/app/users/dto/create-user.dto.ts");
+const login_user_dto_1 = __webpack_require__("./apps/gnosys-api/src/app/users/dto/login-user.dto.ts");
+const verify_uuid_dto_1 = __webpack_require__("./apps/gnosys-api/src/app/users/dto/verify-uuid.dto.ts");
+const users_service_1 = __webpack_require__("./apps/gnosys-api/src/app/users/users.service.ts");
 let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
@@ -567,6 +674,11 @@ let UsersController = class UsersController {
     login(req, loginUserDto) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return yield this.userService.login(req, loginUserDto);
+        });
+    }
+    forgotPassword(req, createForfotPasswordDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return yield this.userService.forgotPassword(req, createForfotPasswordDto);
         });
     }
 };
@@ -595,35 +707,48 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _d : Object, typeof (_e = typeof login_user_dto_1.LoginUserDto !== "undefined" && login_user_dto_1.LoginUserDto) === "function" ? _e : Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UsersController.prototype, "login", null);
+tslib_1.__decorate([
+    common_1.Post('forgot-password'),
+    common_1.HttpCode(common_1.HttpStatus.OK),
+    tslib_1.__param(0, common_1.Req()),
+    tslib_1.__param(1, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_f = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _f : Object, typeof (_g = typeof create_forgot_password_dto_1.CreateForgotPasswordDto !== "undefined" && create_forgot_password_dto_1.CreateForgotPasswordDto) === "function" ? _g : Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UsersController.prototype, "forgotPassword", null);
 UsersController = tslib_1.__decorate([
     common_1.Controller('user'),
-    tslib_1.__metadata("design:paramtypes", [typeof (_f = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _f : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_h = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _h : Object])
 ], UsersController);
 exports.UsersController = UsersController;
 
 
 /***/ }),
 
-/***/ 728:
+/***/ "./apps/gnosys-api/src/app/users/users.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersModule = void 0;
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const mongoose_1 = __webpack_require__(794);
-const users_controller_1 = __webpack_require__(302);
-const users_service_1 = __webpack_require__(510);
-const user_schema_1 = __webpack_require__(359);
-const auth_module_1 = __webpack_require__(343);
-const mail_module_1 = __webpack_require__(644);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const users_controller_1 = __webpack_require__("./apps/gnosys-api/src/app/users/users.controller.ts");
+const users_service_1 = __webpack_require__("./apps/gnosys-api/src/app/users/users.service.ts");
+const user_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/users/schemas/user.schema.ts");
+const forgot_password_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/users/schemas/forgot-password.schema.ts");
+const auth_module_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.module.ts");
+const mail_module_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.module.ts");
 let UsersModule = class UsersModule {
 };
 UsersModule = tslib_1.__decorate([
     common_1.Module({
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: user_schema_1.User.name, schema: user_schema_1.UserSchema }]),
+            mongoose_1.MongooseModule.forFeature([
+                { name: forgot_password_schema_1.ForgotPassword.name, schema: forgot_password_schema_1.ForgotPasswordSchema },
+            ]),
             auth_module_1.AuthModule,
             mail_module_1.MailModule,
         ],
@@ -636,26 +761,28 @@ exports.UsersModule = UsersModule;
 
 /***/ }),
 
-/***/ 510:
+/***/ "./apps/gnosys-api/src/app/users/users.service.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c;
+var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersService = void 0;
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const mongoose_1 = __webpack_require__(185);
-const uuid_1 = __webpack_require__(828);
-const date_fns_1 = __webpack_require__(146);
-const bcrypt = tslib_1.__importStar(__webpack_require__(96));
-const mongoose_2 = __webpack_require__(794);
-const user_schema_1 = __webpack_require__(359);
-const auth_service_1 = __webpack_require__(271);
-const mail_service_1 = __webpack_require__(148);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const mongoose_1 = __webpack_require__("mongoose");
+const uuid_1 = __webpack_require__("uuid");
+const date_fns_1 = __webpack_require__("date-fns");
+const bcrypt = tslib_1.__importStar(__webpack_require__("bcrypt"));
+const mongoose_2 = __webpack_require__("@nestjs/mongoose");
+const user_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/users/schemas/user.schema.ts");
+const forgot_password_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/users/schemas/forgot-password.schema.ts");
+const auth_service_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.service.ts");
+const mail_service_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.service.ts");
 let UsersService = class UsersService {
-    constructor(userModel, mailService, authService) {
+    constructor(userModel, forgotPasswordModel, mailService, authService) {
         this.userModel = userModel;
+        this.forgotPasswordModel = forgotPasswordModel;
         this.mailService = mailService;
         this.authService = authService;
         this.hours_to_verify_signup = 12;
@@ -706,6 +833,17 @@ let UsersService = class UsersService {
             };
         });
     }
+    forgotPassword(req, createForgotPasswordDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            yield this.findUserByEmail(createForgotPasswordDto.email);
+            yield this.saveForgotPassword(req, createForgotPasswordDto);
+            // send an email here
+            return {
+                email: createForgotPasswordDto.email,
+                message: 'verification sent.',
+            };
+        });
+    }
     findAll() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return this.userModel.find().exec();
@@ -741,10 +879,9 @@ let UsersService = class UsersService {
     }
     findUserByEmail(email) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            // const user = await this.userModel.findOne({ email, verified: true });
-            const user = yield this.userModel.findOne({ email });
+            const user = yield this.userModel.findOne({ email, emailVerified: true });
             if (!user) {
-                throw new common_1.NotFoundException('Wrong email or password.');
+                throw new common_1.NotFoundException('Wrong or not verified email.');
             }
             return user;
         });
@@ -759,7 +896,7 @@ let UsersService = class UsersService {
             const match = yield bcrypt.compare(attemptPass, user.password);
             if (!match) {
                 yield this.passwordsDoNotMatch(user);
-                throw new common_1.NotFoundException('Wrong email or password.');
+                throw new common_1.NotFoundException(`Wrong email or password (${user.loginAttempts}/${this.login_attempts_to_block}).`);
             }
             return match;
         });
@@ -797,165 +934,181 @@ let UsersService = class UsersService {
             yield this.mailService.sendUserConfirmation(user);
         });
     }
+    // Forgot password related
+    saveForgotPassword(req, createForgotPasswordDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const forgotPassword = yield this.forgotPasswordModel.create({
+                email: createForgotPasswordDto.email,
+                verification: uuid_1.v4(),
+                expires: date_fns_1.addHours(new Date(), this.hours_to_verify),
+                ip: this.authService.getIp(req),
+                browser: this.authService.getBrowserInfo(req),
+                country: this.authService.getCountry(req),
+            });
+            yield this.mailService.sendPasswordResetLink(forgotPassword);
+            yield forgotPassword.save();
+        });
+    }
 };
 UsersService = tslib_1.__decorate([
     common_1.Injectable(),
     tslib_1.__param(0, mongoose_2.InjectModel(user_schema_1.User.name)),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _a : Object, typeof (_b = typeof mail_service_1.GnosysMailService !== "undefined" && mail_service_1.GnosysMailService) === "function" ? _b : Object, typeof (_c = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _c : Object])
+    tslib_1.__param(1, mongoose_2.InjectModel(forgot_password_schema_1.ForgotPassword.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _a : Object, typeof (_b = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _b : Object, typeof (_c = typeof mail_service_1.GnosysMailService !== "undefined" && mail_service_1.GnosysMailService) === "function" ? _c : Object, typeof (_d = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _d : Object])
 ], UsersService);
 exports.UsersService = UsersService;
 
 
 /***/ }),
 
-/***/ 530:
+/***/ "./apps/gnosys-api/src/environments/environment.ts":
 /***/ ((__unused_webpack_module, exports) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.environment = void 0;
 exports.environment = {
-    production: true,
-    gnosysURL: 'gnosys.herokuapp.com',
+    production: false,
+    gnosysURL: 'localhost:4200',
 };
 
 
 /***/ }),
 
-/***/ 481:
+/***/ "@nestjs/common":
 /***/ ((module) => {
 
 module.exports = require("@nestjs/common");
 
 /***/ }),
 
-/***/ 143:
+/***/ "@nestjs/core":
 /***/ ((module) => {
 
 module.exports = require("@nestjs/core");
 
 /***/ }),
 
-/***/ 64:
+/***/ "@nestjs/jwt":
 /***/ ((module) => {
 
 module.exports = require("@nestjs/jwt");
 
 /***/ }),
 
-/***/ 794:
+/***/ "@nestjs/mongoose":
 /***/ ((module) => {
 
 module.exports = require("@nestjs/mongoose");
 
 /***/ }),
 
-/***/ 340:
+/***/ "@nestjs/passport":
 /***/ ((module) => {
 
 module.exports = require("@nestjs/passport");
 
 /***/ }),
 
-/***/ 385:
+/***/ "@nestjs/serve-static":
 /***/ ((module) => {
 
 module.exports = require("@nestjs/serve-static");
 
 /***/ }),
 
-/***/ 139:
+/***/ "@sendgrid/mail":
 /***/ ((module) => {
 
 module.exports = require("@sendgrid/mail");
 
 /***/ }),
 
-/***/ 96:
+/***/ "bcrypt":
 /***/ ((module) => {
 
 module.exports = require("bcrypt");
 
 /***/ }),
 
-/***/ 849:
+/***/ "class-validator":
 /***/ ((module) => {
 
 module.exports = require("class-validator");
 
 /***/ }),
 
-/***/ 607:
+/***/ "cryptr":
 /***/ ((module) => {
 
 module.exports = require("cryptr");
 
 /***/ }),
 
-/***/ 146:
+/***/ "date-fns":
 /***/ ((module) => {
 
 module.exports = require("date-fns");
 
 /***/ }),
 
-/***/ 860:
+/***/ "express":
 /***/ ((module) => {
 
 module.exports = require("express");
 
 /***/ }),
 
-/***/ 344:
+/***/ "jsonwebtoken":
 /***/ ((module) => {
 
 module.exports = require("jsonwebtoken");
 
 /***/ }),
 
-/***/ 185:
+/***/ "mongoose":
 /***/ ((module) => {
 
 module.exports = require("mongoose");
 
 /***/ }),
 
-/***/ 136:
+/***/ "passport-jwt":
 /***/ ((module) => {
 
 module.exports = require("passport-jwt");
 
 /***/ }),
 
-/***/ 316:
+/***/ "request-ip":
 /***/ ((module) => {
 
 module.exports = require("request-ip");
 
 /***/ }),
 
-/***/ 752:
+/***/ "tslib":
 /***/ ((module) => {
 
 module.exports = require("tslib");
 
 /***/ }),
 
-/***/ 828:
+/***/ "uuid":
 /***/ ((module) => {
 
 module.exports = require("uuid");
 
 /***/ }),
 
-/***/ 564:
+/***/ "validator":
 /***/ ((module) => {
 
 module.exports = require("validator");
 
 /***/ }),
 
-/***/ 17:
+/***/ "path":
 /***/ ((module) => {
 
 module.exports = require("path");
@@ -999,10 +1152,10 @@ var exports = __webpack_exports__;
  * This is only a minimal backend to get started.
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tslib_1 = __webpack_require__(752);
-const common_1 = __webpack_require__(481);
-const core_1 = __webpack_require__(143);
-const app_module_1 = __webpack_require__(624);
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const core_1 = __webpack_require__("@nestjs/core");
+const app_module_1 = __webpack_require__("./apps/gnosys-api/src/app/app.module.ts");
 function bootstrap() {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         const app = yield core_1.NestFactory.create(app_module_1.AppModule);

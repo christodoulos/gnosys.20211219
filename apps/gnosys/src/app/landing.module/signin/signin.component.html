@@ -2,7 +2,13 @@
   <p class="font-semibold text-center mb-3">Sign In to gnosys</p>
   <ui-form-simple-top-down [formGroup]="form"></ui-form-simple-top-down>
   <!-- Buttons -->
-  <div class="flex flex-row items-center justify-end text-sm">
+  <div class="flex flex-row items-center justify-around text-sm">
+    <button
+      (click)="onForgotPassword()"
+      class="text-indigo-700 bg-indigo-100 p-2"
+    >
+      Forgot Password
+    </button>
     <button
       (click)="onSignIn()"
       class="bg-indigo-600 text-white p-2 {{

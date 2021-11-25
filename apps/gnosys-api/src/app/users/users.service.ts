@@ -10,7 +10,11 @@ import { v4 } from 'uuid';
 import { addHours } from 'date-fns';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from './user.schema';
+import { User, UserDocument } from './schemas/user.schema';
+import {
+  ForgotPassword,
+  ForgotPasswordDocument,
+} from './schemas/forgot-password.schema';
 import { User as GnosysUser } from '@gnosys/interfaces';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -18,6 +22,7 @@ import { AuthService } from '../auth/auth.service';
 
 import { GnosysMailService } from '../mail/mail.service';
 import { VerifyUuidDto } from './dto/verify-uuid.dto';
+import { CreateForgotPasswordDto } from './dto/create-forgot-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -28,6 +33,8 @@ export class UsersService {
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(ForgotPassword.name)
+    private forgotPasswordModel: Model<ForgotPasswordDocument>,
     private readonly mailService: GnosysMailService,
     private readonly authService: AuthService
   ) {}
@@ -72,6 +79,19 @@ export class UsersService {
     };
   }
 
+  async forgotPassword(
+    req: Request,
+    createForgotPasswordDto: CreateForgotPasswordDto
+  ) {
+    await this.findUserByEmail(createForgotPasswordDto.email);
+    await this.saveForgotPassword(req, createForgotPasswordDto);
+    // send an email here
+    return {
+      email: createForgotPasswordDto.email,
+      message: 'verification sent.',
+    };
+  }
+
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
@@ -107,10 +127,9 @@ export class UsersService {
   }
 
   private async findUserByEmail(email: string): Promise<UserDocument> {
-    // const user = await this.userModel.findOne({ email, verified: true });
-    const user = await this.userModel.findOne({ email });
+    const user = await this.userModel.findOne({ email, emailVerified: true });
     if (!user) {
-      throw new NotFoundException('Wrong email or password.');
+      throw new NotFoundException('Wrong or not verified email.');
     }
     return user;
   }
@@ -125,7 +144,9 @@ export class UsersService {
     const match = await bcrypt.compare(attemptPass, user.password);
     if (!match) {
       await this.passwordsDoNotMatch(user);
-      throw new NotFoundException('Wrong email or password.');
+      throw new NotFoundException(
+        `Wrong email or password (${user.loginAttempts}/${this.login_attempts_to_block}).`
+      );
     }
     return match;
   }
@@ -155,6 +176,24 @@ export class UsersService {
   }
 
   private async sendRegistrationEmail(user: UserDocument) {
-    await this.mailService.sendUserConfirmation(user as unknown as GnosysUser);
+    await this.mailService.sendUserConfirmation(user);
+  }
+
+  // Forgot password related
+
+  private async saveForgotPassword(
+    req: Request,
+    createForgotPasswordDto: CreateForgotPasswordDto
+  ) {
+    const forgotPassword = await this.forgotPasswordModel.create({
+      email: createForgotPasswordDto.email,
+      verification: v4(),
+      expires: addHours(new Date(), this.hours_to_verify),
+      ip: this.authService.getIp(req),
+      browser: this.authService.getBrowserInfo(req),
+      country: this.authService.getCountry(req),
+    });
+    await this.mailService.sendPasswordResetLink(forgotPassword);
+    await forgotPassword.save();
   }
 }
