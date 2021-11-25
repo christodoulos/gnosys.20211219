@@ -14,6 +14,19 @@ export interface User {
     loading: boolean;
     roles?: [string];
 }
+export interface ForgotPassword {
+    email: string;
+    verification: string;
+    firstUsed?: boolean;
+    finalUsed?: boolean;
+    expires: Date;
+    ip: string;
+    browser: string;
+    country: string;
+    ipChanged?: string;
+    browserChanged?: string;
+    countryChanged?: string;
+}
 export interface LoginFormData {
     email: string;
     password: string;
