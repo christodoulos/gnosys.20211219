@@ -5,7 +5,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, map } from 'rxjs';
 import { Actions } from '@datorama/akita-ng-effects';
 
-import { UserSignUpAction } from '../../state';
+import { UserSignUpAction, AlertErrorAction } from '../../state';
 import { SignUpFormData } from '@gnosys/interfaces';
 
 @Component({
@@ -53,6 +53,12 @@ export class SignupComponent implements OnInit {
     if (this.form.valid) {
       this.actions.dispatch(
         UserSignUpAction({ data: this.form.value as SignUpFormData })
+      );
+    } else {
+      this.actions.dispatch(
+        AlertErrorAction({
+          message: 'Invalid Data. Cannot proceed',
+        })
       );
     }
   }

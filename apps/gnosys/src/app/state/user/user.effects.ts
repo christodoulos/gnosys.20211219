@@ -10,7 +10,6 @@ import * as Actions from './user.actions';
 import { AuthService, TokenService } from '../../services';
 import { map, take, tap } from 'rxjs/operators';
 import { initGnosysUser } from './user.model';
-import { of } from 'rxjs';
 import { UserSignUpAction } from '.';
 
 @Injectable({ providedIn: 'root' })

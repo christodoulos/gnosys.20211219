@@ -14,12 +14,13 @@ import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 import { AkitaNgEffectsModule } from '@datorama/akita-ng-effects';
 import { environment } from '../environments/environment';
 
-import { GnosysUserEffects } from './state';
+import { GnosysUserEffects, AlertEffects } from './state';
 
 import { authInterceptorProviders } from './services';
+import { AlertsComponent } from './components/alerts/alerts.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, AlertsComponent],
   imports: [
     BrowserModule,
     RouterModule.forRoot(
@@ -44,7 +45,7 @@ import { authInterceptorProviders } from './services';
     UiModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     AkitaNgRouterStoreModule,
-    AkitaNgEffectsModule.forRoot([GnosysUserEffects]),
+    AkitaNgEffectsModule.forRoot([GnosysUserEffects, AlertEffects]),
   ],
   providers: [
     {
