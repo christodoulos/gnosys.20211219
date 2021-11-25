@@ -2,22 +2,22 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./apps/gnosys-api/src/app/app.module.ts":
+/***/ 624:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppModule = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const mongoose_1 = __webpack_require__("@nestjs/mongoose");
-const serve_static_1 = __webpack_require__("@nestjs/serve-static");
-const auth_module_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.module.ts");
-const users_module_1 = __webpack_require__("./apps/gnosys-api/src/app/users/users.module.ts");
-const mail_module_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.module.ts");
+const tslib_1 = __webpack_require__(752);
+const common_1 = __webpack_require__(481);
+const mongoose_1 = __webpack_require__(794);
+const serve_static_1 = __webpack_require__(385);
+const auth_module_1 = __webpack_require__(343);
+const users_module_1 = __webpack_require__(728);
+const mail_module_1 = __webpack_require__(644);
 // import { AppController } from './app.controller';
 // import { AppService } from './app.service';
-const path_1 = __webpack_require__("path");
+const path_1 = __webpack_require__(17);
 let AppModule = class AppModule {
 };
 AppModule = tslib_1.__decorate([
@@ -41,21 +41,21 @@ exports.AppModule = AppModule;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/auth/auth.module.ts":
+/***/ 343:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthModule = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const auth_service_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.service.ts");
-const passport_1 = __webpack_require__("@nestjs/passport");
-const jwt_1 = __webpack_require__("@nestjs/jwt");
-const jwt_strategy_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/jwt.strategy.ts");
-const mongoose_1 = __webpack_require__("@nestjs/mongoose");
-const user_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/users/user.schema.ts");
-const refresh_token_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/refresh-token-schema.ts");
+const tslib_1 = __webpack_require__(752);
+const common_1 = __webpack_require__(481);
+const auth_service_1 = __webpack_require__(271);
+const passport_1 = __webpack_require__(340);
+const jwt_1 = __webpack_require__(64);
+const jwt_strategy_1 = __webpack_require__(30);
+const mongoose_1 = __webpack_require__(794);
+const user_schema_1 = __webpack_require__(359);
+const refresh_token_schema_1 = __webpack_require__(333);
 let AuthModule = class AuthModule {
 };
 AuthModule = tslib_1.__decorate([
@@ -80,22 +80,22 @@ exports.AuthModule = AuthModule;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/auth/auth.service.ts":
+/***/ 271:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthService = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const jwt_1 = __webpack_require__("@nestjs/jwt");
-const jsonwebtoken_1 = __webpack_require__("jsonwebtoken");
-const mongoose_1 = __webpack_require__("@nestjs/mongoose");
-const mongoose_2 = __webpack_require__("mongoose");
-const cryptr_1 = tslib_1.__importDefault(__webpack_require__("cryptr"));
-const uuid_1 = __webpack_require__("uuid");
-const request_ip_1 = __webpack_require__("request-ip");
+const tslib_1 = __webpack_require__(752);
+const common_1 = __webpack_require__(481);
+const jwt_1 = __webpack_require__(64);
+const jsonwebtoken_1 = __webpack_require__(344);
+const mongoose_1 = __webpack_require__(794);
+const mongoose_2 = __webpack_require__(185);
+const cryptr_1 = tslib_1.__importDefault(__webpack_require__(607));
+const uuid_1 = __webpack_require__(828);
+const request_ip_1 = __webpack_require__(316);
 let AuthService = class AuthService {
     constructor(userModel, refreshTokenModel, jwtService) {
         this.userModel = userModel;
@@ -193,7 +193,7 @@ exports.AuthService = AuthService;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/auth/constants.ts":
+/***/ 525:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -206,17 +206,17 @@ exports.jwtConstants = {
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/auth/jwt.strategy.ts":
+/***/ 30:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.JwtStrategy = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const passport_jwt_1 = __webpack_require__("passport-jwt");
-const passport_1 = __webpack_require__("@nestjs/passport");
-const common_1 = __webpack_require__("@nestjs/common");
-const constants_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/constants.ts");
+const tslib_1 = __webpack_require__(752);
+const passport_jwt_1 = __webpack_require__(136);
+const passport_1 = __webpack_require__(340);
+const common_1 = __webpack_require__(481);
+const constants_1 = __webpack_require__(525);
 let JwtStrategy = class JwtStrategy extends passport_1.PassportStrategy(passport_jwt_1.Strategy) {
     constructor() {
         super({
@@ -240,13 +240,13 @@ exports.JwtStrategy = JwtStrategy;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/auth/refresh-token-schema.ts":
+/***/ 333:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RefreshTokenSchema = void 0;
-const mongoose_1 = __webpack_require__("mongoose");
+const mongoose_1 = __webpack_require__(185);
 exports.RefreshTokenSchema = new mongoose_1.Schema({
     userId: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -277,16 +277,16 @@ exports.RefreshTokenSchema = new mongoose_1.Schema({
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/mail/mail.module.ts":
+/***/ 644:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MailModule = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const mail_1 = __webpack_require__("@sendgrid/mail");
-const mail_service_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.service.ts");
+const tslib_1 = __webpack_require__(752);
+const common_1 = __webpack_require__(481);
+const mail_1 = __webpack_require__(139);
+const mail_service_1 = __webpack_require__(148);
 let MailModule = class MailModule {
 };
 MailModule = tslib_1.__decorate([
@@ -300,17 +300,17 @@ exports.MailModule = MailModule;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/mail/mail.service.ts":
+/***/ 148:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GnosysMailService = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const mail_1 = __webpack_require__("@sendgrid/mail");
-const environment_1 = __webpack_require__("./apps/gnosys-api/src/environments/environment.ts");
+const tslib_1 = __webpack_require__(752);
+const common_1 = __webpack_require__(481);
+const mail_1 = __webpack_require__(139);
+const environment_1 = __webpack_require__(530);
 let GnosysMailService = class GnosysMailService {
     constructor(mailService) {
         this.mailService = mailService;
@@ -325,7 +325,7 @@ let GnosysMailService = class GnosysMailService {
                 from: 'gnosys Support Team <gnosys@gnosys.tech>',
                 templateId: 'd-1c3af41cf45942e4a42594cb59365aa4',
                 dynamicTemplateData: {
-                    givenName: user.givenName,
+                    givenName: user.firstName,
                     url,
                 },
             });
@@ -341,14 +341,14 @@ exports.GnosysMailService = GnosysMailService;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/users/dto/create-user.dto.ts":
+/***/ 842:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CreateUserDto = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const class_validator_1 = __webpack_require__("class-validator");
+const tslib_1 = __webpack_require__(752);
+const class_validator_1 = __webpack_require__(849);
 class CreateUserDto {
 }
 tslib_1.__decorate([
@@ -385,14 +385,14 @@ exports.CreateUserDto = CreateUserDto;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/users/dto/login-user.dto.ts":
+/***/ 557:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LoginUserDto = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const class_validator_1 = __webpack_require__("class-validator");
+const tslib_1 = __webpack_require__(752);
+const class_validator_1 = __webpack_require__(849);
 class LoginUserDto {
 }
 tslib_1.__decorate([
@@ -415,14 +415,14 @@ exports.LoginUserDto = LoginUserDto;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/users/dto/verify-uuid.dto.ts":
+/***/ 42:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VerifyUuidDto = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const class_validator_1 = __webpack_require__("class-validator");
+const tslib_1 = __webpack_require__(752);
+const class_validator_1 = __webpack_require__(849);
 class VerifyUuidDto {
 }
 tslib_1.__decorate([
@@ -435,17 +435,17 @@ exports.VerifyUuidDto = VerifyUuidDto;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/users/user.schema.ts":
+/***/ 359:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserSchema = exports.User = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const mongoose_1 = __webpack_require__("@nestjs/mongoose");
-const validator_1 = tslib_1.__importDefault(__webpack_require__("validator"));
-const bcrypt = tslib_1.__importStar(__webpack_require__("bcrypt"));
+const tslib_1 = __webpack_require__(752);
+const mongoose_1 = __webpack_require__(794);
+const validator_1 = tslib_1.__importDefault(__webpack_require__(564));
+const bcrypt = tslib_1.__importStar(__webpack_require__(96));
 let User = class User {
 };
 tslib_1.__decorate([
@@ -536,20 +536,20 @@ exports.UserSchema.set('versionKey', false);
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/users/users.controller.ts":
+/***/ 302:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersController = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const express_1 = __webpack_require__("express");
-const create_user_dto_1 = __webpack_require__("./apps/gnosys-api/src/app/users/dto/create-user.dto.ts");
-const login_user_dto_1 = __webpack_require__("./apps/gnosys-api/src/app/users/dto/login-user.dto.ts");
-const verify_uuid_dto_1 = __webpack_require__("./apps/gnosys-api/src/app/users/dto/verify-uuid.dto.ts");
-const users_service_1 = __webpack_require__("./apps/gnosys-api/src/app/users/users.service.ts");
+const tslib_1 = __webpack_require__(752);
+const common_1 = __webpack_require__(481);
+const express_1 = __webpack_require__(860);
+const create_user_dto_1 = __webpack_require__(842);
+const login_user_dto_1 = __webpack_require__(557);
+const verify_uuid_dto_1 = __webpack_require__(42);
+const users_service_1 = __webpack_require__(510);
 let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
@@ -604,20 +604,20 @@ exports.UsersController = UsersController;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/users/users.module.ts":
+/***/ 728:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersModule = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const mongoose_1 = __webpack_require__("@nestjs/mongoose");
-const users_controller_1 = __webpack_require__("./apps/gnosys-api/src/app/users/users.controller.ts");
-const users_service_1 = __webpack_require__("./apps/gnosys-api/src/app/users/users.service.ts");
-const user_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/users/user.schema.ts");
-const auth_module_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.module.ts");
-const mail_module_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.module.ts");
+const tslib_1 = __webpack_require__(752);
+const common_1 = __webpack_require__(481);
+const mongoose_1 = __webpack_require__(794);
+const users_controller_1 = __webpack_require__(302);
+const users_service_1 = __webpack_require__(510);
+const user_schema_1 = __webpack_require__(359);
+const auth_module_1 = __webpack_require__(343);
+const mail_module_1 = __webpack_require__(644);
 let UsersModule = class UsersModule {
 };
 UsersModule = tslib_1.__decorate([
@@ -636,23 +636,23 @@ exports.UsersModule = UsersModule;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/app/users/users.service.ts":
+/***/ 510:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersService = void 0;
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const mongoose_1 = __webpack_require__("mongoose");
-const uuid_1 = __webpack_require__("uuid");
-const date_fns_1 = __webpack_require__("date-fns");
-const bcrypt = tslib_1.__importStar(__webpack_require__("bcrypt"));
-const mongoose_2 = __webpack_require__("@nestjs/mongoose");
-const user_schema_1 = __webpack_require__("./apps/gnosys-api/src/app/users/user.schema.ts");
-const auth_service_1 = __webpack_require__("./apps/gnosys-api/src/app/auth/auth.service.ts");
-const mail_service_1 = __webpack_require__("./apps/gnosys-api/src/app/mail/mail.service.ts");
+const tslib_1 = __webpack_require__(752);
+const common_1 = __webpack_require__(481);
+const mongoose_1 = __webpack_require__(185);
+const uuid_1 = __webpack_require__(828);
+const date_fns_1 = __webpack_require__(146);
+const bcrypt = tslib_1.__importStar(__webpack_require__(96));
+const mongoose_2 = __webpack_require__(794);
+const user_schema_1 = __webpack_require__(359);
+const auth_service_1 = __webpack_require__(271);
+const mail_service_1 = __webpack_require__(148);
 let UsersService = class UsersService {
     constructor(userModel, mailService, authService) {
         this.userModel = userModel;
@@ -808,154 +808,154 @@ exports.UsersService = UsersService;
 
 /***/ }),
 
-/***/ "./apps/gnosys-api/src/environments/environment.ts":
+/***/ 530:
 /***/ ((__unused_webpack_module, exports) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.environment = void 0;
 exports.environment = {
-    production: false,
-    gnosysURL: 'localhost:4200',
+    production: true,
+    gnosysURL: 'gnosys.herokuapp.com',
 };
 
 
 /***/ }),
 
-/***/ "@nestjs/common":
+/***/ 481:
 /***/ ((module) => {
 
 module.exports = require("@nestjs/common");
 
 /***/ }),
 
-/***/ "@nestjs/core":
+/***/ 143:
 /***/ ((module) => {
 
 module.exports = require("@nestjs/core");
 
 /***/ }),
 
-/***/ "@nestjs/jwt":
+/***/ 64:
 /***/ ((module) => {
 
 module.exports = require("@nestjs/jwt");
 
 /***/ }),
 
-/***/ "@nestjs/mongoose":
+/***/ 794:
 /***/ ((module) => {
 
 module.exports = require("@nestjs/mongoose");
 
 /***/ }),
 
-/***/ "@nestjs/passport":
+/***/ 340:
 /***/ ((module) => {
 
 module.exports = require("@nestjs/passport");
 
 /***/ }),
 
-/***/ "@nestjs/serve-static":
+/***/ 385:
 /***/ ((module) => {
 
 module.exports = require("@nestjs/serve-static");
 
 /***/ }),
 
-/***/ "@sendgrid/mail":
+/***/ 139:
 /***/ ((module) => {
 
 module.exports = require("@sendgrid/mail");
 
 /***/ }),
 
-/***/ "bcrypt":
+/***/ 96:
 /***/ ((module) => {
 
 module.exports = require("bcrypt");
 
 /***/ }),
 
-/***/ "class-validator":
+/***/ 849:
 /***/ ((module) => {
 
 module.exports = require("class-validator");
 
 /***/ }),
 
-/***/ "cryptr":
+/***/ 607:
 /***/ ((module) => {
 
 module.exports = require("cryptr");
 
 /***/ }),
 
-/***/ "date-fns":
+/***/ 146:
 /***/ ((module) => {
 
 module.exports = require("date-fns");
 
 /***/ }),
 
-/***/ "express":
+/***/ 860:
 /***/ ((module) => {
 
 module.exports = require("express");
 
 /***/ }),
 
-/***/ "jsonwebtoken":
+/***/ 344:
 /***/ ((module) => {
 
 module.exports = require("jsonwebtoken");
 
 /***/ }),
 
-/***/ "mongoose":
+/***/ 185:
 /***/ ((module) => {
 
 module.exports = require("mongoose");
 
 /***/ }),
 
-/***/ "passport-jwt":
+/***/ 136:
 /***/ ((module) => {
 
 module.exports = require("passport-jwt");
 
 /***/ }),
 
-/***/ "request-ip":
+/***/ 316:
 /***/ ((module) => {
 
 module.exports = require("request-ip");
 
 /***/ }),
 
-/***/ "tslib":
+/***/ 752:
 /***/ ((module) => {
 
 module.exports = require("tslib");
 
 /***/ }),
 
-/***/ "uuid":
+/***/ 828:
 /***/ ((module) => {
 
 module.exports = require("uuid");
 
 /***/ }),
 
-/***/ "validator":
+/***/ 564:
 /***/ ((module) => {
 
 module.exports = require("validator");
 
 /***/ }),
 
-/***/ "path":
+/***/ 17:
 /***/ ((module) => {
 
 module.exports = require("path");
@@ -999,10 +999,10 @@ var exports = __webpack_exports__;
  * This is only a minimal backend to get started.
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tslib_1 = __webpack_require__("tslib");
-const common_1 = __webpack_require__("@nestjs/common");
-const core_1 = __webpack_require__("@nestjs/core");
-const app_module_1 = __webpack_require__("./apps/gnosys-api/src/app/app.module.ts");
+const tslib_1 = __webpack_require__(752);
+const common_1 = __webpack_require__(481);
+const core_1 = __webpack_require__(143);
+const app_module_1 = __webpack_require__(624);
 function bootstrap() {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         const app = yield core_1.NestFactory.create(app_module_1.AppModule);

@@ -19,7 +19,7 @@ export class GnosysMailService {
       from: 'gnosys Support Team <gnosys@gnosys.tech>',
       templateId: 'd-1c3af41cf45942e4a42594cb59365aa4',
       dynamicTemplateData: {
-        givenName: user.givenName,
+        givenName: user.firstName,
         url,
       },
     });

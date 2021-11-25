@@ -5,8 +5,8 @@ export interface Message {
 export interface User {
     email: string;
     displayName: string;
-    givenName: string;
-    familyName: string;
+    firstName: string;
+    lastName: string;
     emailVerified: boolean;
     accessToken: string;
     refreshToken: string;
@@ -21,8 +21,9 @@ export interface LoginFormData {
 export interface SignUpFormData {
     email: string;
     password: string;
-    givenName: string;
-    familyName: string;
+    confirmPassword: string;
+    firstName: string;
+    lastName: string;
 }
 export interface Generic {
     [key: string]: FormControl<string>;
