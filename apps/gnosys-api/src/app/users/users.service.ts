@@ -15,7 +15,6 @@ import {
   ForgotPassword,
   ForgotPasswordDocument,
 } from './schemas/forgot-password.schema';
-import { User as GnosysUser } from '@gnosys/interfaces';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AuthService } from '../auth/auth.service';
@@ -23,6 +22,7 @@ import { AuthService } from '../auth/auth.service';
 import { GnosysMailService } from '../mail/mail.service';
 import { VerifyUuidDto } from './dto/verify-uuid.dto';
 import { CreateForgotPasswordDto } from './dto/create-forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -85,10 +85,30 @@ export class UsersService {
   ) {
     await this.findUserByEmail(createForgotPasswordDto.email);
     await this.saveForgotPassword(req, createForgotPasswordDto);
-    // send an email here
     return {
       email: createForgotPasswordDto.email,
-      message: 'verification sent.',
+      message: 'Verification sent.',
+    };
+  }
+
+  async forgotPasswordVerify(req: Request, verifyUuidDto: VerifyUuidDto) {
+    const forgotPassword = await this.findForgotPasswordByUuid(verifyUuidDto);
+    await this.setForgotPasswordFirstUsed(req, forgotPassword);
+    return {
+      email: forgotPassword.email,
+      message: 'Now reset your password.',
+    };
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const forgotPassword = await this.findForgotPasswordByEmail(
+      resetPasswordDto
+    );
+    await this.setForgotPasswordFinalUsed(forgotPassword);
+    await this.resetUserPassword(resetPasswordDto);
+    return {
+      email: resetPasswordDto.email,
+      message: 'Password successfully changed.',
     };
   }
 
@@ -195,5 +215,62 @@ export class UsersService {
     });
     await this.mailService.sendPasswordResetLink(forgotPassword);
     await forgotPassword.save();
+  }
+
+  private async findForgotPasswordByUuid(
+    verifyUuidDto: VerifyUuidDto
+  ): Promise<ForgotPasswordDocument> {
+    const forgotPassword = await this.forgotPasswordModel.findOne({
+      verification: verifyUuidDto.verification,
+      firstUsed: false,
+      finalUsed: false,
+      expires: { $gt: new Date() },
+    });
+    if (!forgotPassword) {
+      throw new BadRequestException('Invalid or expired reset link.');
+    }
+    return forgotPassword;
+  }
+
+  private async setForgotPasswordFirstUsed(
+    req: Request,
+    forgotPassword: ForgotPasswordDocument
+  ) {
+    forgotPassword.firstUsed = true;
+    forgotPassword.ipChanged = this.authService.getIp(req);
+    forgotPassword.browserChanged = this.authService.getBrowserInfo(req);
+    forgotPassword.countryChanged = this.authService.getCountry(req);
+    await forgotPassword.save();
+  }
+
+  private async findForgotPasswordByEmail(
+    resetPasswordDto: ResetPasswordDto
+  ): Promise<ForgotPasswordDocument> {
+    const forgotPassword = await this.forgotPasswordModel.findOne({
+      email: resetPasswordDto.email,
+      firstUsed: true,
+      finalUsed: false,
+      expires: { $gt: new Date() },
+    });
+    if (!forgotPassword) {
+      throw new BadRequestException('Bad request.');
+    }
+    return forgotPassword;
+  }
+
+  private async setForgotPasswordFinalUsed(
+    forgotPassword: ForgotPasswordDocument
+  ) {
+    forgotPassword.finalUsed = true;
+    await forgotPassword.save();
+  }
+
+  private async resetUserPassword(resetPasswordDto: ResetPasswordDto) {
+    const user = await this.userModel.findOne({
+      email: resetPasswordDto.email,
+      verified: true,
+    });
+    user.password = resetPasswordDto.password;
+    await user.save();
   }
 }

@@ -451,6 +451,36 @@ exports.LoginUserDto = LoginUserDto;
 
 /***/ }),
 
+/***/ 848:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ResetPasswordDto = void 0;
+const tslib_1 = __webpack_require__(752);
+const class_validator_1 = __webpack_require__(849);
+class ResetPasswordDto {
+}
+tslib_1.__decorate([
+    class_validator_1.IsNotEmpty(),
+    class_validator_1.IsString(),
+    class_validator_1.MinLength(5),
+    class_validator_1.MaxLength(255),
+    class_validator_1.IsEmail(),
+    tslib_1.__metadata("design:type", String)
+], ResetPasswordDto.prototype, "email", void 0);
+tslib_1.__decorate([
+    class_validator_1.IsNotEmpty(),
+    class_validator_1.IsString(),
+    class_validator_1.MinLength(5),
+    class_validator_1.MaxLength(1024),
+    tslib_1.__metadata("design:type", String)
+], ResetPasswordDto.prototype, "password", void 0);
+exports.ResetPasswordDto = ResetPasswordDto;
+
+
+/***/ }),
+
 /***/ 42:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -646,7 +676,7 @@ exports.UserSchema.set('versionKey', false);
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersController = void 0;
 const tslib_1 = __webpack_require__(752);
@@ -655,6 +685,7 @@ const express_1 = __webpack_require__(860);
 const create_forgot_password_dto_1 = __webpack_require__(89);
 const create_user_dto_1 = __webpack_require__(842);
 const login_user_dto_1 = __webpack_require__(557);
+const reset_password_dto_1 = __webpack_require__(848);
 const verify_uuid_dto_1 = __webpack_require__(42);
 const users_service_1 = __webpack_require__(510);
 let UsersController = class UsersController {
@@ -679,6 +710,16 @@ let UsersController = class UsersController {
     forgotPassword(req, createForfotPasswordDto) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return yield this.userService.forgotPassword(req, createForfotPasswordDto);
+        });
+    }
+    forgotPasswordVerify(req, verifyUuidDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return yield this.userService.forgotPasswordVerify(req, verifyUuidDto);
+        });
+    }
+    resetPassword(resetPasswordDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return yield this.userService.resetPassword(resetPasswordDto);
         });
     }
 };
@@ -716,9 +757,26 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [typeof (_f = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _f : Object, typeof (_g = typeof create_forgot_password_dto_1.CreateForgotPasswordDto !== "undefined" && create_forgot_password_dto_1.CreateForgotPasswordDto) === "function" ? _g : Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UsersController.prototype, "forgotPassword", null);
+tslib_1.__decorate([
+    common_1.Post('forgot-password-verify'),
+    common_1.HttpCode(common_1.HttpStatus.OK),
+    tslib_1.__param(0, common_1.Req()),
+    tslib_1.__param(1, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_h = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _h : Object, typeof (_j = typeof verify_uuid_dto_1.VerifyUuidDto !== "undefined" && verify_uuid_dto_1.VerifyUuidDto) === "function" ? _j : Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UsersController.prototype, "forgotPasswordVerify", null);
+tslib_1.__decorate([
+    common_1.Post('reset-password'),
+    common_1.HttpCode(common_1.HttpStatus.OK),
+    tslib_1.__param(0, common_1.Body()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_k = typeof reset_password_dto_1.ResetPasswordDto !== "undefined" && reset_password_dto_1.ResetPasswordDto) === "function" ? _k : Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UsersController.prototype, "resetPassword", null);
 UsersController = tslib_1.__decorate([
     common_1.Controller('user'),
-    tslib_1.__metadata("design:paramtypes", [typeof (_h = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _h : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_l = typeof users_service_1.UsersService !== "undefined" && users_service_1.UsersService) === "function" ? _l : Object])
 ], UsersController);
 exports.UsersController = UsersController;
 
@@ -837,10 +895,30 @@ let UsersService = class UsersService {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             yield this.findUserByEmail(createForgotPasswordDto.email);
             yield this.saveForgotPassword(req, createForgotPasswordDto);
-            // send an email here
             return {
                 email: createForgotPasswordDto.email,
-                message: 'verification sent.',
+                message: 'Verification sent.',
+            };
+        });
+    }
+    forgotPasswordVerify(req, verifyUuidDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const forgotPassword = yield this.findForgotPasswordByUuid(verifyUuidDto);
+            yield this.setForgotPasswordFirstUsed(req, forgotPassword);
+            return {
+                email: forgotPassword.email,
+                message: 'Now reset your password.',
+            };
+        });
+    }
+    resetPassword(resetPasswordDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const forgotPassword = yield this.findForgotPasswordByEmail(resetPasswordDto);
+            yield this.setForgotPasswordFinalUsed(forgotPassword);
+            yield this.resetUserPassword(resetPasswordDto);
+            return {
+                email: resetPasswordDto.email,
+                message: 'Password successfully changed.',
             };
         });
     }
@@ -947,6 +1025,59 @@ let UsersService = class UsersService {
             });
             yield this.mailService.sendPasswordResetLink(forgotPassword);
             yield forgotPassword.save();
+        });
+    }
+    findForgotPasswordByUuid(verifyUuidDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const forgotPassword = yield this.forgotPasswordModel.findOne({
+                verification: verifyUuidDto.verification,
+                firstUsed: false,
+                finalUsed: false,
+                expires: { $gt: new Date() },
+            });
+            if (!forgotPassword) {
+                throw new common_1.BadRequestException('Invalid or expired reset link.');
+            }
+            return forgotPassword;
+        });
+    }
+    setForgotPasswordFirstUsed(req, forgotPassword) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            forgotPassword.firstUsed = true;
+            forgotPassword.ipChanged = this.authService.getIp(req);
+            forgotPassword.browserChanged = this.authService.getBrowserInfo(req);
+            forgotPassword.countryChanged = this.authService.getCountry(req);
+            yield forgotPassword.save();
+        });
+    }
+    findForgotPasswordByEmail(resetPasswordDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const forgotPassword = yield this.forgotPasswordModel.findOne({
+                email: resetPasswordDto.email,
+                firstUsed: true,
+                finalUsed: false,
+                expires: { $gt: new Date() },
+            });
+            if (!forgotPassword) {
+                throw new common_1.BadRequestException('Bad request.');
+            }
+            return forgotPassword;
+        });
+    }
+    setForgotPasswordFinalUsed(forgotPassword) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            forgotPassword.finalUsed = true;
+            yield forgotPassword.save();
+        });
+    }
+    resetUserPassword(resetPasswordDto) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const user = yield this.userModel.findOne({
+                email: resetPasswordDto.email,
+                verified: true,
+            });
+            user.password = resetPasswordDto.password;
+            yield user.save();
         });
     }
 };

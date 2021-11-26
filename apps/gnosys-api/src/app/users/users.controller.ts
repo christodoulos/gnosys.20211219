@@ -12,6 +12,7 @@ import { Request } from 'express';
 import { CreateForgotPasswordDto } from './dto/create-forgot-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { VerifyUuidDto } from './dto/verify-uuid.dto';
 import { UsersService } from './users.service';
 
@@ -43,5 +44,20 @@ export class UsersController {
     @Body() createForfotPasswordDto: CreateForgotPasswordDto
   ) {
     return await this.userService.forgotPassword(req, createForfotPasswordDto);
+  }
+
+  @Post('forgot-password-verify')
+  @HttpCode(HttpStatus.OK)
+  async forgotPasswordVerify(
+    @Req() req: Request,
+    @Body() verifyUuidDto: VerifyUuidDto
+  ) {
+    return await this.userService.forgotPasswordVerify(req, verifyUuidDto);
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return await this.userService.resetPassword(resetPasswordDto);
   }
 }
