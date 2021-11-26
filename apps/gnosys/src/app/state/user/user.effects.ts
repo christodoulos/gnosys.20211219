@@ -87,9 +87,43 @@ export class GnosysUserEffects {
           .subscribe((forgotPassword) => {
             this.actions.dispatch(
               AlertSuccessAction({
-                message: `If ${forgotPassword.email} is a real gnosys user, you will soon receive a reset link.`,
+                message: `We sent to ${forgotPassword.email}  a reset link.`,
               })
             );
+          });
+      })
+    )
+  );
+
+  UserForgotPasswordVerifyEffect = createEffect(() =>
+    this.actions.pipe(
+      ofType(Actions.UserForgotPasswordVerifyAction),
+      tap((payload) => {
+        this.authService
+          .forgotVerify(payload.verification)
+          .pipe(take(1))
+          .subscribe((response) => {
+            this.userService.updateUser({ email: response.email });
+            this.actions.dispatch(
+              AlertSuccessAction({ message: response.message })
+            );
+          });
+      })
+    )
+  );
+
+  UserResetPasswordEffect = createEffect(() =>
+    this.actions.pipe(
+      ofType(Actions.UserResetPasswordAction),
+      tap((payload) => {
+        this.authService
+          .resetPassword(payload.data)
+          .pipe(
+            take(1),
+            map((response) => response.message)
+          )
+          .subscribe((message) => {
+            this.actions.dispatch(AlertSuccessAction({ message }));
           });
       })
     )

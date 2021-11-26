@@ -13,6 +13,7 @@ import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
 import { GnosysUserEffects } from '../state';
 import { VerifyComponent } from './verify/verify.component';
+import { ResetComponent } from './reset/reset.component';
 
 export const routes: Route[] = [
   {
@@ -27,6 +28,7 @@ export const routes: Route[] = [
   { path: 'signup', component: SignupComponent },
   { path: 'signin', component: SigninComponent },
   { path: 'verify/:verification', component: VerifyComponent },
+  { path: 'reset/:verification', component: ResetComponent },
 ];
 
 @NgModule({
@@ -45,6 +47,7 @@ export const routes: Route[] = [
     SignupComponent,
     SigninComponent,
     VerifyComponent,
+    ResetComponent,
   ],
 })
 export class LandingModule {}

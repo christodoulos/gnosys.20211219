@@ -19,16 +19,7 @@ export interface User {
 
 export interface ForgotPassword {
   email: string;
-  verification: string;
-  firstUsed?: boolean;
-  finalUsed?: boolean;
-  expires: Date;
-  ip: string;
-  browser: string;
-  country: string;
-  ipChanged?: string;
-  browserChanged?: string;
-  countryChanged?: string;
+  message: string;
 }
 
 export interface LoginFormData {
@@ -42,6 +33,11 @@ export interface SignUpFormData {
   confirmPassword: string;
   firstName: string;
   lastName: string;
+}
+
+export interface ResetPasswordData {
+  email: string;
+  password: string;
 }
 
 export interface Generic {

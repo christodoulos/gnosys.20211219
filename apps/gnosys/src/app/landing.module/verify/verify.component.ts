@@ -13,7 +13,6 @@ export class VerifyComponent implements OnInit {
   constructor(private actions: Actions, private query: RouterQuery) {}
 
   ngOnInit(): void {
-    console.log('In verify component');
     this.params
       .pipe(take(1))
       .subscribe((verification) =>

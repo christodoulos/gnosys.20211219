@@ -1,5 +1,10 @@
 import { createAction, props } from '@datorama/akita-ng-effects';
-import { LoginFormData, SignUpFormData, User } from '@gnosys/interfaces';
+import {
+  LoginFormData,
+  ResetPasswordData,
+  SignUpFormData,
+  User,
+} from '@gnosys/interfaces';
 
 export const UserInitAction = createAction('Gnosys Init User');
 
@@ -21,6 +26,16 @@ export const UserLoginAction = createAction(
 export const UserForgotPasswordAction = createAction(
   'Forgot Password',
   props<{ email: string }>()
+);
+
+export const UserForgotPasswordVerifyAction = createAction(
+  'Forgot Password Verify',
+  props<{ verification: string }>()
+);
+
+export const UserResetPasswordAction = createAction(
+  'Reset Password',
+  props<{ data: ResetPasswordData }>()
 );
 
 export const UserUpdateAction = createAction(

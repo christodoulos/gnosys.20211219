@@ -7,8 +7,10 @@ import {
   ForgotPassword,
   LoginFormData,
   SignUpFormData,
+  ResetPasswordData,
 } from '@gnosys/interfaces';
 import { TokenService } from '.';
+import { AbstractFormGroupDirective } from '@angular/forms';
 
 const AUTH_API = '/api/user/';
 
@@ -42,6 +44,22 @@ export class AuthService {
     return this.http.post<ForgotPassword>(
       `${AUTH_API}forgot-password`,
       { email },
+      httpOptions
+    );
+  }
+
+  forgotVerify(verification: string): Observable<ForgotPassword> {
+    return this.http.post<ForgotPassword>(
+      `${AUTH_API}forgot-password-verify`,
+      { verification },
+      httpOptions
+    );
+  }
+
+  resetPassword(data: ResetPasswordData): Observable<ForgotPassword> {
+    return this.http.post<ForgotPassword>(
+      `${AUTH_API}reset-password`,
+      data,
       httpOptions
     );
   }

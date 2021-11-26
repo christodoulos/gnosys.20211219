@@ -14,7 +14,11 @@ import { TokenService } from './token.service';
 import { catchError, Observable, throwError } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { Actions } from '@datorama/akita-ng-effects';
-import { AlertErrorAction, UserIsLoadingAction } from '../state';
+import {
+  AlertErrorAction,
+  RouterNavigateRootAction,
+  UserIsLoadingAction,
+} from '../state';
 
 const TOKEN_HEADER_KEY = 'Authorization';
 
@@ -38,6 +42,12 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
         console.log(error);
+        if (
+          error instanceof HttpErrorResponse &&
+          authReq.url.includes('forgot-password-verify')
+        ) {
+          this.actions.dispatch(RouterNavigateRootAction);
+        }
         return throwError(() => {
           this.actions.dispatch(
             AlertErrorAction({

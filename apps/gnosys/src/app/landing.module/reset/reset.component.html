@@ -1,0 +1,17 @@
+<div class="space-y-3">
+  <p class="font-semibold text-center mb-3">Reset your password</p>
+  <ui-form-simple-top-down [formGroup]="form"></ui-form-simple-top-down>
+  <div class="flex flex-row items-center justify-around text-sm">
+    <button routerLink="" class="text-indigo-700 bg-indigo-100 p-2">
+      Cancel
+    </button>
+    <button
+      (click)="onSubmit()"
+      class="bg-indigo-600 text-white p-2 {{
+        form.valid ? 'cursor-pointer' : 'cursor-not-allowed'
+      }}"
+    >
+      Submit
+    </button>
+  </div>
+</div>
