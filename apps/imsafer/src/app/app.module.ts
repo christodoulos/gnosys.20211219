@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 
+import { UiModule } from '@gnosys/ui';
+
 import { AppComponent } from './app.component';
 import { RobustComponent } from './robust/robust.component';
 import { FiresafetyComponent } from './firesafety/firesafety.component';
@@ -27,6 +29,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
       { path: 'evacuation', component: EvacuationComponent },
       { path: 'risk', component: RiskComponent },
     ]),
+    UiModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

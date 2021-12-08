@@ -1,1 +1,31 @@
-<p>robust works!</p>
+<div class="space-y-3">
+  <p class="font-semibold">Define Parameters</p>
+  <div class="flex justify-around">
+    <ui-form-simple-top-down [formGroup]="form"></ui-form-simple-top-down>
+    <div>
+      <p>Blast Output</p>
+      <p>BW = {{ form.value.buildingWidth }}</p>
+      <p>BH = {{ form.value.buildingHeight }}</p>
+      <p>D = {{ form.value.distance }}</p>
+      <p>E = {{ form.value.explosives }}</p>
+      <p *ngIf="result">
+        Result:
+        {{ result }}
+      </p>
+    </div>
+  </div>
+  <button (click)="calc()" class="text-indigo-700 bg-indigo-100 p-2">
+    Blast
+  </button>
+  <div class="flex flex-col space-y-1">
+    <label class="font-semibold">Strengthen</label>
+
+    <input
+      type="file"
+      id="avatar"
+      name="avatar"
+      accept="image/png, image/jpeg"
+    />
+  </div>
+  <button class="text-indigo-700 bg-indigo-100 p-2">Strengthen</button>
+</div>
