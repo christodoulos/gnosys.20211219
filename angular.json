@@ -174,6 +174,127 @@
       "tags": [],
       "implicitDependencies": ["gnosys"]
     },
+    "imsafer": {
+      "projectType": "application",
+      "root": "apps/imsafer",
+      "sourceRoot": "apps/imsafer/src",
+      "prefix": "gnosys",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/imsafer",
+            "index": "apps/imsafer/src/index.html",
+            "main": "apps/imsafer/src/main.ts",
+            "polyfills": "apps/imsafer/src/polyfills.ts",
+            "tsConfig": "apps/imsafer/tsconfig.app.json",
+            "assets": [
+              "apps/imsafer/src/favicon.ico",
+              "apps/imsafer/src/assets"
+            ],
+            "styles": ["apps/imsafer/src/styles.css"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/imsafer/src/environments/environment.ts",
+                  "with": "apps/imsafer/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "imsafer:build:production"
+            },
+            "development": {
+              "browserTarget": "imsafer:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "imsafer:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/imsafer/src/**/*.ts",
+              "apps/imsafer/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/imsafer"],
+          "options": {
+            "jestConfig": "apps/imsafer/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "imsafer-e2e": {
+      "root": "apps/imsafer-e2e",
+      "sourceRoot": "apps/imsafer-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/imsafer-e2e/cypress.json",
+            "devServerTarget": "imsafer:serve:development"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "imsafer:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/imsafer-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["imsafer"]
+    },
     "interfaces": {
       "root": "libs/interfaces",
       "sourceRoot": "libs/interfaces/src",

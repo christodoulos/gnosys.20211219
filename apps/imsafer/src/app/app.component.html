@@ -1,0 +1,86 @@
+<div class="flex h-screen">
+  <div class="m-auto bg-gray-100">
+    <div class="space-y-2">
+      <!-- topbar starts here -->
+      <div class="flex flex-row bg-gray-400">
+        <img
+          src="/assets/logo.png"
+          (click)="navigateTo('')"
+          class="cursor-pointer"
+        />
+        <div class="flex flex-col p-2 font-semibold">
+          <div>Advanced Information Modelling for SAFER</div>
+          <div>structures against manmade hazards</div>
+        </div>
+      </div>
+      <!-- topbar ends here -->
+      <!-- tabbar starts here -->
+      <div class="flex flex-row justify-around">
+        <button
+          (click)="navigateTo('robust')"
+          type="button"
+          class="
+            inline-flex
+            items-center
+            px-3
+            py-2
+            font-medium
+            text-white
+            bg-red-500
+          "
+        >
+          Robust
+        </button>
+        <button
+          (click)="navigateTo('firesafety')"
+          type="button"
+          class="
+            inline-flex
+            items-center
+            px-3
+            py-2
+            font-medium
+            text-white
+            bg-green-500
+          "
+        >
+          Fire Safety
+        </button>
+        <button
+          (click)="navigateTo('evacuation')"
+          type="button"
+          class="
+            inline-flex
+            items-center
+            px-3
+            py-2
+            font-medium
+            text-white
+            bg-yellow-500
+          "
+        >
+          Evacuation
+        </button>
+        <button
+          (click)="navigateTo('risk')"
+          type="button"
+          class="
+            inline-flex
+            items-center
+            px-3
+            py-2
+            font-medium
+            text-white
+            bg-indigo-500
+          "
+        >
+          Risk
+        </button>
+      </div>
+      <!-- tabbar ends here -->
+      <div class="p-2 bg-{{ outletColor() }}-200">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>
