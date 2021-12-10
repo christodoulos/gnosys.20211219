@@ -17,6 +17,8 @@ export class FormSimpleTopDownComponent {
         if (control.errors != null) {
             const error = Object.keys(control.errors)[0];
             switch (error) {
+                case 'pattern':
+                    return 'The field pattern is invalid';
                 case 'required':
                     return 'The field is required';
                 case 'email':
