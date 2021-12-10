@@ -4,10 +4,20 @@
     <ui-form-simple-top-down [formGroup]="form"></ui-form-simple-top-down>
     <div>
       <p>Blast Output</p>
-      <p>BW = {{ form.value.buildingWidth }}</p>
-      <p>BH = {{ form.value.buildingHeight }}</p>
-      <p>D = {{ form.value.distance }}</p>
-      <p>E = {{ form.value.explosives }}</p>
+      <p>
+        BW =
+        {{ form.controls.buildingWidth.valid ? form.value.buildingWidth : '' }}
+      </p>
+      <p>
+        BH =
+        {{
+          form.controls.buildingHeight.valid ? form.value.buildingHeight : ''
+        }}
+      </p>
+      <p>D = {{ form.controls.distance.valid ? form.value.distance : '' }}</p>
+      <p>
+        E = {{ form.controls.explosives.valid ? form.value.explosives : '' }}
+      </p>
       <p *ngIf="result">
         Result:
         {{ result }}
