@@ -24,7 +24,12 @@
       </p>
     </div>
   </div>
-  <button (click)="calc()" class="text-indigo-700 bg-indigo-100 p-2">
+  <button
+    (click)="calc()"
+    class="text-indigo-700 bg-indigo-100 p-2 {{
+      form.valid ? 'cursor-pointer' : 'cursor-not-allowed'
+    }}"
+  >
     Blast
   </button>
   <div class="flex flex-col space-y-1">
