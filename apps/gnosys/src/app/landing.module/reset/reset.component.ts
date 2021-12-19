@@ -4,8 +4,8 @@ import { Validators } from '@angular/forms';
 import { Actions } from '@datorama/akita-ng-effects';
 import { RouterQuery } from '@datorama/akita-ng-router-store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, map } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { take, map } from 'rxjs/operators';
 import {
   AlertErrorAction,
   UserForgotPasswordVerifyAction,
