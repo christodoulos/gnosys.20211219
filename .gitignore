@@ -5,6 +5,9 @@ dist/*
 /tmp
 /out-tsc
 
+# cached output
+.angular/*
+
 # dependencies
 /node_modules
 

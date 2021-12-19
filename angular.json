@@ -1,7 +1,4 @@
 {
-  "cli": {
-    "analytics": "6910fefa-a794-4dfe-be67-f81aa27e1241"
-  },
   "version": 1,
   "projects": {
     "gnosys": {
@@ -304,7 +301,7 @@
       "projectType": "library",
       "architect": {
         "build": {
-          "builder": "@nrwl/workspace:tsc",
+          "builder": "@nrwl/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/libs/interfaces",
